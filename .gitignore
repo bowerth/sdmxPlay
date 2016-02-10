@@ -1,0 +1,19 @@
+/logs
+/target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+/.ensime*
+/lib
+# /project/.ensime
+# /project/target
+# /project/EnsimeProjectSettings.scala
+# /project
+/test
+
+activator*
+
+*.*~

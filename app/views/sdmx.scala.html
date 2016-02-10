@@ -41,38 +41,55 @@
           -->
           <div id="graphdiv" style="width:100%; height:300px;"></div>
           }
-          <div class="col-sm-12">
-            <form class="form-horizontal">
-              <div class="form-group">
-		<label for="inputMax" class="col-sm-2 control-label">Time Range</label>
-		<div class="col-sm-4">
-                  <input class="form-control" type="text" id="inputMax"
-			 value="[at] sd . timerange" readonly />
-		</div>
-              </div>
-              <div class="form-group">
-		<label for="inputMin" class="col-sm-2 control-label">Series Count</label>
-		<div class="col-sm-4">
-                  <input class="form-control" type="text" id="inputMin"
-			 value="[at] sd . nseries" readonly />
-		</div>
-              </div>
-            </form>
-          </div>
+
+          <!-- <div class="col-sm-12"> -->
+          <!--   <form class="form-horizontal"> -->
+          <!--     <div class="form-group"> -->
+	  <!-- 	<label for="inputMax" class="col-sm-2 control-label">Time Range</label> -->
+	  <!-- 	<div class="col-sm-4"> -->
+          <!--         <input class="form-control" type="text" id="inputMax" -->
+	  <!-- 		 value="[at] sd . timerange" readonly /> -->
+	  <!-- 	</div> -->
+          <!--     </div> -->
+          <!--     <div class="form-group"> -->
+	  <!-- 	<label for="inputMin" class="col-sm-2 control-label">Series Count</label> -->
+	  <!-- 	<div class="col-sm-4"> -->
+          <!--         <input class="form-control" type="text" id="inputMin" -->
+	  <!-- 		 value="[at] sd . nseries" readonly /> -->
+	  <!-- 	</div> -->
+          <!--     </div> -->
+          <!--   </form> -->
+          <!-- </div> -->
+
 	</div>
       </div>
 
-      <div class="form-inline">
+      <div class="col-sm-12">
+        <form class="form-horizontal">
+        <form class="form-inline">
+	  <!-- <div class="col-sm-12 form-group"> -->
+	  <div class="form-group">
+            <label for="inputQuery">Query</label>
+            <!-- <label for="inputQuery" class="col-sm-2 control-label">Query</label> -->
+	    <!-- <div class="col-sm-10"> -->
+              <!-- <input type="text" class="col-sm-10 form-control" id="inputQuery" value="@sd.query"/> -->
+              <input type="text" class="form-control" id="inputQuery" value="@sd.query"/>
+	    <!-- </div> -->
+	  </div>      
+	</form>
+      </div>
+
+	<div class="form-inline">
 	<div class="form-group">
           <label for="inputProvider">Provider Code</label>
           <input type="text" class="form-control" id="inputProvider" value="@sd.provider"/>
 	</div>
 	&nbsp;&nbsp;&nbsp;
-	<div class="form-group">
-          <label for="inputQuery">Query</label>
-          <input type="text" class="form-control" id="inputQuery" value="@sd.query"/>
-	</div>      
-	&nbsp;&nbsp;&nbsp;
+	<!-- <div class="form-group"> -->
+        <!--   <label for="inputQuery">Query</label> -->
+        <!--   <input type="text" class="form-control" id="inputQuery" value="@sd.query"/> -->
+	<!-- </div>       -->
+	<!-- &nbsp;&nbsp;&nbsp; -->
 	<div class="form-group">
           <label for="inputStart">Start</label>
           <input type="number" class="form-control" id="inputStart" value="@sd.start" min="1900" max="@Calendar.getInstance().get(Calendar.YEAR)"/>
@@ -94,9 +111,9 @@
 
     <script type="text/javascript">
       g = new Dygraph(
-    // containing div
-    document.getElementById("graphdiv"),
-    "@routes.Assets.at("data/sdmx/tsdata.csv")"
+      // containing div
+      document.getElementById("graphdiv"),
+      "@routes.Assets.at("data/sdmx/tsdata.csv")"
     );
     </script>
 
