@@ -1,0 +1,19 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /                              controllers.Weather.index
+GET     /:location/:year/              controllers.Weather.main(location: String, year: String)
+GET     /:location/:year               controllers.Weather.redirect(location: String, year: String)
+GET     /:location/:year/:format/      controllers.Weather.plot(location: String, year: String, format: String)
+GET     /:location/:year/:format       controllers.Weather.plot(location: String, year: String, format: String)
+
+GET     /sdmx/                         controllers.Sdmx.index
+GET     /sdmx/:provider/:query/:start/:end/ controllers.Sdmx.main(provider: String, query: String, start: String, end: String)
+GET     /sdmx/:provider/:query/:start/:end  controllers.Sdmx.redirect(provider: String, query: String, start: String, end: String)
+# GET     /sdmx/:provider/:query/:start/:end/:format/      controllers.Sdmx.plot(provider: String, query: String, start: String, end: String, format: String)
+# GET     /sdmx/:provider/:query/:start/:end/:format      controllers.Sdmx.plot(provider: String, query: String, start: String, end: String, format: String)
+
+# Map static resources from the /public folder to the /assets URL path
+# GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                  controllers.Assets.at(path="/public", file)
