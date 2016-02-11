@@ -6,7 +6,18 @@ $(document).ready(function() {
 		var query = $("#inputQuery").val();
 		var start = $("#inputStart").val();
 		var end = $("#inputEnd").val();
-        window.location.replace("../../../../" + provider + "/" + query + "/" + start + "/" + end + "/");
+        // window.location.replace("../../" + provider + "/" + query + "/?start=" + start + "&end=" + end);
+
+        if (start != "" && end != ""){
+        	window.location.replace("../../" + provider + "/" + query + "/?start=" + start + "&end=" + end);
+        } else if (end != "") {
+        	window.location.replace("../../" + provider + "/" + query + "/?end=" + end);
+        } else if (start != "") {
+        	window.location.replace("../../" + provider + "/" + query + "/?start=" + start);
+        } else {
+        	window.location.replace("../../" + provider + "/" + query);
+        }
+
   	});
 
 	$("#inputProvider").keyup(function(event) {

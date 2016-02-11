@@ -13,12 +13,11 @@ object Sdmx extends Controller {
   // private val errorSdmxData = SdmxData(null, null, null, null, "NA")
   private val errorSdmxData = SdmxData(null, null, null, null)
 
-  private def getSdmxData(provider: String, query: String, start: String, end: String) = {
+  private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]) = {
     if ( provider == null ) errorSdmxData
     else try {
 
-      val res = SdmxClientHandler.getTimeSeries(provider, query, start, end)
-      //
+      val res = SdmxClientHandler.getTimeSeries(provider, query, start.get, end.get)
       val res2 = res.toArray.
         map(_.asInstanceOf[PortableTimeSeries])
       //
@@ -37,17 +36,24 @@ object Sdmx extends Controller {
       writer.write(output)
       writer.close()
 
-      // SdmxData(provider, query, start, end, output)
-      // SdmxData(provider, query, start, end, "NA")
       SdmxData(provider, query, start, end)
     } catch {
       case _: Throwable => errorSdmxData
     }
   }
 
-  private def validateSdmx(provider: String, query: String, start: String, end: String): (String,String,String,String) = {
-    if ( start.matches("\\d{4}") && end.matches("\\d{4}") ) (provider.toUpperCase, query, start, end)
-    else (null,null,null,null)
+  private def validateYear(year: Option[String]): Option[String] = {
+    val empty = Option[String]("")
+    if ( year.isEmpty || !year.get.matches("\\d{4}") ) (empty)
+    else (year)
+  }
+
+  private def validateSdmx(provider: String, query: String, start: Option[String], end: Option[String]): (String, String, Option[String], Option[String]) = {
+    // if ( start.get.matches("\\d{4}") && end.get.matches("\\d{4}") ) (provider.toUpperCase, query, start, end)
+    // else (null,null,null,null)
+    val altstart = validateYear(start)
+    val altend = validateYear(end)
+    (provider.toUpperCase, query, altstart, altend)
   }
 
   private def getName (tts: PortableTimeSeries): String =
@@ -75,37 +81,16 @@ object Sdmx extends Controller {
   }
 
   def index = Action { implicit request =>
-    // val queryECB = "EXR.A.USD+NZD.EUR.SP00.A"
-    val queryECB = "EXR.M.USD+GBP+CAD+AUD.EUR.SP00.A"
-    Redirect(routes.Sdmx.main("ECB", queryECB, "1999", "2015"))
+    val queryECB = "EXR.A.USD+GBP+CAD+AUD.EUR.SP00.A"
+    Redirect(routes.Sdmx.main("ECB", queryECB, Option[String](null), Option[String](null)))
   }
 
-  def redirect(provider: String, query: String, start: String, end: String) = Action { implicit request =>
+  def redirect(provider: String, query: String, start: Option[String], end: Option[String]) = Action { implicit request =>
     Redirect(routes.Sdmx.main(provider, query, start, end))
   }
 
-  def main(provider: String, query: String, start: String, end: String) = Action {
+  def main(provider: String, query: String, start: Option[String], end: Option[String]) = Action {
     val (prov, qy, st, ed) = validateSdmx(provider, query, start, end)
-
-    // val res = SdmxClientHandler.getTimeSeries(prov, qy, st, ed)
-    // //
-    // val res2 = res.toArray.
-    // map(_.asInstanceOf[PortableTimeSeries])
-    // //
-    // val nameArray = for (ts <- res2) yield getName(ts)
-    // val headerArray = "TIME_PERIOD" +: nameArray
-    // //
-    // val years0 = getYears(res2(0))
-    // val valueArray = for (series <- res2) yield getValues(series)
-    // val dataArray = years0 +: valueArray
-    // //
-    // val l = makeTable(data = dataArray)
-    // //
-    // val output = headerArray.mkString(",") + "\n" + l
-    // //
-    // val writer = new PrintWriter(new File("public/data/sdmx/tsdata.csv"))
-    // writer.write(output)
-    // writer.close()
 
     val sd = getSdmxData(prov, qy, st, ed)
     val sdView =

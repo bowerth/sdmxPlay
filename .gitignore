@@ -7,12 +7,15 @@
 /.settings
 /RUNNING_PID
 /.ensime*
-/lib
+# /lib
 # /project/.ensime
 # /project/target
-# /project/EnsimeProjectSettings.scala
+/project/EnsimeProjectSettings.scala
 # /project
 /test
+
+/project/target
+/project/project/target
 
 activator*
 
