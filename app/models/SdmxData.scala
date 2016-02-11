@@ -8,7 +8,7 @@ case class SdmxData(
   // end: String
   start: Option[String],
   end: Option[String]
-  // ,
-  // output: String
+  ,
+  output: String
   // timerange: String, nseries: String
 )

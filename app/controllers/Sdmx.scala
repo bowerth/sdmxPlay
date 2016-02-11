@@ -6,12 +6,12 @@ import scala.io.Source
 
 import it.bancaditalia.oss.sdmx.client.SdmxClientHandler
 import it.bancaditalia.oss.sdmx.api.PortableTimeSeries
-import java.io._
+// import java.io._
 
 object Sdmx extends Controller {
 
-  // private val errorSdmxData = SdmxData(null, null, null, null, "NA")
-  private val errorSdmxData = SdmxData(null, null, null, null)
+  private val errorSdmxData = SdmxData(null, null, null, null, "")
+  // private val errorSdmxData = SdmxData(null, null, null, null)
 
   private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]) = {
     if ( provider == null ) errorSdmxData
@@ -30,13 +30,15 @@ object Sdmx extends Controller {
       //
       val l = makeTable(data = dataArray)
       //
-      val output = headerArray.mkString(",") + "\n" + l
+      // val output = headerArray.mkString(",") + "\n" + l
+      val output = headerArray.mkString(",") + "\\n" + l
       //
-      val writer = new PrintWriter(new File("public/data/sdmx/tsdata.csv"))
-      writer.write(output)
-      writer.close()
+      // val writer = new PrintWriter(new File("public/data/sdmx/tsdata.csv"))
+      // writer.write(output)
+      // writer.close()
 
-      SdmxData(provider, query, start, end)
+      // SdmxData(provider, query, start, end)
+      SdmxData(provider, query, start, end, output)
     } catch {
       case _: Throwable => errorSdmxData
     }
@@ -77,12 +79,17 @@ object Sdmx extends Controller {
     val tableSeq =
       for (row <- 0 to data(0).length-1)
       yield makeRow(row, data)
-    tableSeq.mkString("\n")
+    // tableSeq.mkString("\n")
+    tableSeq.mkString("\\n")
   }
 
   def index = Action { implicit request =>
-    val queryECB = "EXR.A.USD+GBP+CAD+AUD.EUR.SP00.A"
-    Redirect(routes.Sdmx.main("ECB", queryECB, Option[String](null), Option[String](null)))
+    val query = "EXR.A.USD+GBP+CAD+AUD.EUR.SP00.A"
+    val provider = "ECB"
+    val start = Option[String](null)
+    val end = Option[String](null)
+    // Redirect(routes.Sdmx.main("ECB", queryECB, Option[String](null), Option[String](null)))
+    Redirect(routes.Sdmx.main(provider, query, start, end))
   }
 
   def redirect(provider: String, query: String, start: Option[String], end: Option[String]) = Action { implicit request =>
@@ -95,8 +102,8 @@ object Sdmx extends Controller {
     val sd = getSdmxData(prov, qy, st, ed)
     val sdView =
       if ( sd.provider == null )
-        // SdmxData(provider.toUpperCase, query, start, end, "NA")
-        SdmxData(provider.toUpperCase,query,start,end)
+        SdmxData(provider.toUpperCase, query, start, end, "")
+        // SdmxData(provider.toUpperCase,query,start,end)
       else sd
     Ok(views.html.sdmx(sdView))
   }
