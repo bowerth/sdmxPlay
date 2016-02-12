@@ -63,16 +63,16 @@ object Sdmx extends Controller {
   private def dateQtoD (date: String) = {
     val month = ((date.takeRight(1).toInt - 1) * 3 + 1).toString
     val fillzero = "0" * (2 - month.length)
-    date.take(4) + "-" + fillzero + month + "-01"
+    date.take(4) + "/" + fillzero + month + "/01"
   }
 
   private def modifyDate(date: String) = {
-    if (date.length == 4) date + "-01-01"
+    if (date.length == 4) date + "/01/01"
     else if (date.length == 7)
       if (date.contains("Q"))
         dateQtoD(date)
       else
-        date + "-01"
+        date + "/01"
     else
       date
   }
@@ -85,18 +85,25 @@ object Sdmx extends Controller {
   private def makeRowSeq(row: Int, data: Array[Array[String]]) = {
     for (col <- 0 to data.length-1)
     yield data(col)(row)
+    // yield "["+ data(col)(row) +"]"
   }
 
-  private def makeRow(row: Int, data: Array[Array[String]]) =
-    makeRowSeq(row, data).mkString(",")
+  private def makeRow(row: Int, data: Array[Array[String]]) = {
+    // makeRowSeq(row, data).mkString(",")
+    "["+ makeRowSeq(row, data).mkString(",") +"]"
+  }
 
   private def makeTable(data: Array[Array[String]]) = {
     val tableSeq =
       for (row <- 0 to data(0).length-1)
       yield makeRow(row, data)
-    // tableSeq.mkString("\n")
-    tableSeq.mkString("\\n")
+    "[\n"+ tableSeq.mkString(",\n") +"\n]"
+    // tableSeq.mkString("\\n")
   }
+  // val row = data(1)
+  // val data = dataArray
+  // val l = makeTable(data = dataArray)
+
 
   private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]) = {
     if ( provider == null ) errorSdmxData
@@ -116,17 +123,23 @@ object Sdmx extends Controller {
       //
       // val time0 = getTime(res2(0))
       val time0 = getTime(res2(0)).map(modifyDate)
+
+      // val timeArray = for (series <- res2) yield getTime(series).map(modifyDate)
+      // val timeArrayLength = timeArray.map(_.length)
+      // val timeArrayLongest = timeArray(timeArrayLength.indexOf(timeArrayLength.max))
+
       val valueArray = for (series <- res2) yield getValues(series)
       val dataArray = time0 +: valueArray
       //
       val l = makeTable(data = dataArray)
       //
       // val output = headerArray.mkString(",") + "\n" + l
-      val output = headerArray.mkString(",") + "\\n" + l
+      // val output = headerArray.mkString(",") + "\\n" + l
+      val output = l + ",\n{labels: [ \"" + headerArray.mkString("\",\"") + "\" ] }"
       //
       // val writer = new PrintWriter(new File("public/data/sdmx/tsdata.csv"))
       // writer.write(output)
-      // writer.close()
+      // writer.close()p
 
       // SdmxData(provider, query, start, end)
       SdmxData(provider, query, start, end, output)
