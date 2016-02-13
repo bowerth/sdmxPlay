@@ -8,7 +8,7 @@
 /RUNNING_PID
 /.ensime*
 # /lib
-# /project/.ensime
+/project/.ensime
 # /project/target
 /project/EnsimeProjectSettings.scala
 # /project

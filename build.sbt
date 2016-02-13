@@ -1,4 +1,4 @@
-name := """rscalaPlay"""
+name := """sdmxPlay"""
 
 version := "1.0-SNAPSHOT"
 
