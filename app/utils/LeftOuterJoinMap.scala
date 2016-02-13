@@ -28,50 +28,24 @@ object LeftOuterJoinMap {
   
   def main(args: Array[String]): Unit = {
     
-    val map1 = Map(1 -> "a", 2 -> "b", 3 -> "c")
-    val map2 = Map(1 -> "1",           3 -> "3")
+    // val map1 = Map(1 -> "a", 2 -> "b", 3 -> "c")
+    // val map2 = Map(1 -> "1",           3 -> "3")
+    // val joined = (new LeftOuterJoinMap(map1, map2)).join
 
-    val joined = (new LeftOuterJoinMap(map1, map2)).join
+    val times = Array[String]("2002/01/01", "2002/02/01", "2002/03/01", "2002/04/01")
+    val values = Array[String]("10", "20", "30", "40")
+    val timesValues = times zip values
+    val timesValuesMap = timesValues.toMap
 
-    // // two arrays to map
-    // val times = Array[String]("2002/01/01", "2002/02/01", "2002/03/01", "2002/04/01")
-    // val values = Array[String]("10", "20", "30", "40")
-    // val timesValues = times zip values
-    // val timesValuesMap = timesValues.toMap
+    val times2 = Array[String]("2002/01/01", "2002/04/01")
+    val values2 = Array[String]("10", "40")
+    val timesValues2 = times2 zip values2
+    val timesValuesMap2 = timesValues2.toMap
 
-    // val times2 = Array[String]("2002/01/01", "2002/04/01")
-    // val values2 = Array[String]("10", "40")
-    // val timesValues2 = times2 zip values2
-    // val timesValuesMap2 = timesValues2.toMap
+    val joined2 = (new LeftOuterJoinMap(timesValuesMap, timesValuesMap2)).join
 
-
-    // val joined2 = (new LeftOuterJoinMap(timesValuesMap, timesValuesMap2)).join
-
-    // def h(k:Int, v:Int) = if (v > 2) Some(k->v) else None
-    // def h(k: Int, v: Int) = if (v > 2) Some(k -> v) else None
-    // val m = Map(1 -> 2, 2 -> 4, 3 -> 6)
-    // m.toList.toMap
-    // m.flatMap { case (k, v) => h(k, v) }
-
-    // // http://stackoverflow.com/questions/5582862/scala-how-to-create-a-mapk-v-from-a-setk-and-a-function-from-k-to-v
-    // val s = Set(2, 3, 5)
-    // def func(i: Int) = "" + i + i
-    // val func2 = (r: Map[Int,String], i: Int) => r + (i -> func(i))
-    // s.foldLeft(Map.empty[Int,String])(func2)
-
-    // map1
-    // http://www.brunton-spall.co.uk/post/2011/12/02/map-map-and-flatmap-in-scala/
-    //
-    // scala> val m = Map(1 -> 2, 2 -> 4, 3 -> 6)
-    // m: scala.collection.immutable.Map[Int,Int] = Map(1 -> 2, 2 -> 4, 3 -> 6)
-    //
-    // scala> def h(k:Int, v:Int) = if (v > 2) Some(k->v) else None
-    // h: (k: Int, v: Int)Option[(Int, Int)]
-    //
-    // scala> m.flatMap { case (k,v) => h(k,v) }
-    // res108: scala.collection.immutable.Map[Int,Int] = Map(2 -> 4, 3 -> 6)
-
-    println(joined)
+    // println(joined)
+    println(joined2)
   }
 
 }

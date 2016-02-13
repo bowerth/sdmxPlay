@@ -76,7 +76,6 @@ object Sdmx extends Controller {
         dateQtoD(date)
       else
         // date + "/01"
-        // date
         date.replace("-", "/") + "/01"
     else
       date
@@ -92,17 +91,12 @@ object Sdmx extends Controller {
     val emptyVal = List.fill(time.length)("")
     val timeValueRef = (time zip emptyVal).toMap
 
-    // val timeA = getTime(res2(0)).map(modifyDate)
-    // val valueA = getValues(res2(0))
     val timeA = getTime(tts).map(modifyDate)
     val valueA = getValues(tts)
-    
     val timeValueA = (timeA zip valueA).toMap
 
     val joined = (new LeftOuterJoinMap(timeValueRef, timeValueA)).join
     val joinedSorted = ListMap(joined.toSeq.sortBy(_._1):_*)
-
-    // joinedSorted.flatMap(e => List(e._2._2)).toArray
 
     val joinedArray = joinedSorted.flatMap(e => List(e._2._2)).toArray
 
@@ -119,7 +113,7 @@ object Sdmx extends Controller {
   def makeRowSeq(row: Int, data: Array[Array[String]]) = {
     for (col <- 0 to data.length-1)
     yield data(col)(row)
-    // yield "["+ data(col)(row) +"]"
+
   }
 
   def makeRow(row: Int, data: Array[Array[String]]) = {
@@ -127,17 +121,13 @@ object Sdmx extends Controller {
     "["+ makeRowSeq(row, data).mkString(",") +"]"
   }
 
-  def makeTable(data: Array[Array[String]]) = {
+  def makeTable(data: Array[Array[String]]): String = {
     val tableSeq =
       for (row <- 0 to data(0).length-1)
       yield makeRow(row, data)
-    "[\n"+ tableSeq.mkString(",\n") +"\n]"
-    // tableSeq.mkString("\\n")
+    val table = "[\n"+ tableSeq.mkString(",\n") +"\n]"
+    return table
   }
-  // val row = data(1)
-  // val data = dataArray
-  // val l = makeTable(data = dataArray)
-
 
   def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]) = {
     if ( provider == null ) errorSdmxData
@@ -156,35 +146,27 @@ object Sdmx extends Controller {
       //
       val nameArray = for (ts <- res2) yield getName(ts)
       val headerArray = "TIME_PERIOD" +: nameArray
-      //
-
-      // new def: pass PortableTimeSeries (res), get longest time series
 
       val seriesLength = for (series <- res2) yield getTime(series).length
       val indexLongest = seriesLength.indexOf(seriesLength.max)
       val timeRef = getTime(res2(indexLongest)).map(modifyDate)
       val valueArray = for (series <- res2) yield fillValues(series, timeRef)
 
-      val timeRefDate = for (date <- timeRef) yield ("new Date(\"" + date + "\")")
-      // val dataArray = timeRef +: valueArray
-      val dataArray = timeRefDate +: valueArray
-
       // val time0 = getTime(res2(0)).map(modifyDate)
       // val valueArray = for (series <- res2) yield getValues(series)
       // val dataArray = time0 +: valueArray
-      //
+      val timeRefDate = for (date <- timeRef) yield ("new Date(\"" + date + "\")")
+      val dataArray = timeRefDate +: valueArray
+
       val l = makeTable(data = dataArray)
-      //
-      // val output = headerArray.mkString(",") + "\n" + l
-      // val output = headerArray.mkString(",") + "\\n" + l
+
       val output = l + ",\n{labels: [ \"" + headerArray.mkString("\",\"") + "\" ] }"
-      //
+      // println(output)
+
       // val writer = new PrintWriter(new File("public/data/sdmx/tsdata.csv"))
       // writer.write(output)
       // writer.close()p
 
-      // SdmxData(provider, query, start, end)
-      // println(output)
       SdmxData(provider, query, start, end, output)
     } catch {
       case _: Throwable => errorSdmxData
