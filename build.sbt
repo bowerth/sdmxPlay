@@ -11,6 +11,9 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   specs2 % Test
+  //   ,
+  // "org.webjars" %% "webjars-play" % "2.2.0",
+  // "org.webjars" % "bootstrap" % "2.3.1"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"

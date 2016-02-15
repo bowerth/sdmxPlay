@@ -13,6 +13,7 @@
 /project/EnsimeProjectSettings.scala
 # /project
 /test
+/docs
 
 /project/target
 /project/project/target

@@ -2,17 +2,16 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# GET     /                              controllers.Weather.index
-# GET     /:location/:year/              controllers.Weather.main(location: String, year: String)
-# GET     /:location/:year               controllers.Weather.redirect(location: String, year: String)
-# GET     /:location/:year/:format/      controllers.Weather.plot(location: String, year: String, format: String)
-# GET     /:location/:year/:format       controllers.Weather.plot(location: String, year: String, format: String)
-
 GET     /                                controllers.Sdmx.index
 GET     /:provider/:query/               controllers.Sdmx.main(provider: String, query: String, start: Option[String], end: Option[String])
 GET     /:provider/:query                controllers.Sdmx.redirect(provider: String, query: String, start: Option[String], end: Option[String])
-# GET     /:provider/:query/               controllers.Sdmx.main(provider: String, query: String, start: Option[String] ?= Option[String]("2000"), end: Option[String] ?= Option[String]("2015"))
-# GET     /:provider/:query                controllers.Sdmx.redirect(provider: String, query: String, start: Option[String] ?= Option[String]("2000"), end: Option[String] ?= Option[String]("2015"))
+
+# GET     /message                    	 controllers.MessageController.getMessage()
+GET     /messagesdmxprovider             controllers.MessageController.getMessageSdmxProvider()
+# GET   /messagesdmxflow            	 controllers.MessageController.getMessageSdmxFlow()
+GET     /messagesdmxflow             	 controllers.MessageController.getMessageSdmxFlow(provider: String)
+
+GET     /assets/javascripts/routes  	 controllers.MessageController.javascriptRoutes()	
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                  controllers.Assets.at(path="/public", file)

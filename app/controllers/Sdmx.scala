@@ -1,12 +1,10 @@
 package controllers
 
-import models.SdmxData
 import play.api.mvc._
-import scala.io.Source
 
+import models.SdmxData
 import it.bancaditalia.oss.sdmx.client.SdmxClientHandler
 import it.bancaditalia.oss.sdmx.api.PortableTimeSeries
-// import java.io._
 
 import utils.LeftOuterJoinMap
 import scala.collection.immutable.ListMap
@@ -22,7 +20,6 @@ object Sdmx extends Controller {
     val provider = "ECB"
     val start = Option[String](null)
     val end = Option[String](null)
-    // Redirect(routes.Sdmx.main("ECB", queryECB, Option[String](null), Option[String](null)))
     Redirect(routes.Sdmx.main(provider, query, start, end))
   }
 
@@ -33,7 +30,6 @@ object Sdmx extends Controller {
     val sdView =
       if ( sd.provider == null )
         SdmxData(provider.toUpperCase, query, start, end, "")
-        // SdmxData(provider.toUpperCase,query,start,end)
       else sd
     Ok(views.html.sdmx(sdView))
   }
@@ -45,15 +41,12 @@ object Sdmx extends Controller {
   }
 
   def validateSdmx(provider: String, query: String, start: Option[String], end: Option[String]): (String, String, Option[String], Option[String]) = {
-    // if ( start.get.matches("\\d{4}") && end.get.matches("\\d{4}") ) (provider.toUpperCase, query, start, end)
-    // else (null,null,null,null)
     val altstart = validateYear(start)
     val altend = validateYear(end)
     (provider.toUpperCase, query, altstart, altend)
   }
 
   val errorSdmxData = SdmxData(null, null, null, null, "")
-  // val errorSdmxData = SdmxData(null, null, null, null)
 
   def getName (tts: PortableTimeSeries): String = {
     tts.getName
@@ -102,7 +95,6 @@ object Sdmx extends Controller {
 
     val output =
       for (field <- joinedArray) yield {
-        // if (field.isEmpty) ""
         if (field.isEmpty) "null"
         else field.get.toString
       }
@@ -117,7 +109,6 @@ object Sdmx extends Controller {
   }
 
   def makeRow(row: Int, data: Array[Array[String]]) = {
-    // makeRowSeq(row, data).mkString(",")
     "["+ makeRowSeq(row, data).mkString(",") +"]"
   }
 
@@ -152,20 +143,12 @@ object Sdmx extends Controller {
       val timeRef = getTime(res2(indexLongest)).map(modifyDate)
       val valueArray = for (series <- res2) yield fillValues(series, timeRef)
 
-      // val time0 = getTime(res2(0)).map(modifyDate)
-      // val valueArray = for (series <- res2) yield getValues(series)
-      // val dataArray = time0 +: valueArray
       val timeRefDate = for (date <- timeRef) yield ("new Date(\"" + date + "\")")
       val dataArray = timeRefDate +: valueArray
 
       val l = makeTable(data = dataArray)
 
       val output = l + ",\n{labels: [ \"" + headerArray.mkString("\",\"") + "\" ] }"
-      // println(output)
-
-      // val writer = new PrintWriter(new File("public/data/sdmx/tsdata.csv"))
-      // writer.write(output)
-      // writer.close()p
 
       SdmxData(provider, query, start, end, output)
     } catch {
