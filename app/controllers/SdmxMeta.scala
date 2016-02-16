@@ -66,9 +66,13 @@ object SdmxMeta extends Controller {
     else try {
 
       // val provider = "ECB"
-      val pattern = ""
+      // val pattern = ""
+      // val pattern = "rail"
+      // pattern
+      // Array(pattern.toUpperCase)
 
-      val res = SdmxClientHandler.getFlows(provider, pattern)
+      // val res = SdmxClientHandler.getFlows(provider, pattern)
+      val res = SdmxClientHandler.getFlows(provider.toUpperCase, pattern)
 
       // res.get("YC")
       // for (key <- Array("YC", "STP")) yield res.get(key)

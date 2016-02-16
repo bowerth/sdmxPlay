@@ -29,7 +29,8 @@ object Sdmx extends Controller {
     val sd = getSdmxData(prov, qy, st, ed)
     val sdView =
       if ( sd.provider == null )
-        SdmxData(provider.toUpperCase, query, start, end, "")
+        // SdmxData(provider.toUpperCase, query, start, end, "")
+        SdmxData(provider.toUpperCase, query, start, end, "", "", "")
       else sd
     Ok(views.html.sdmx(sdView))
   }
@@ -46,23 +47,24 @@ object Sdmx extends Controller {
     (provider.toUpperCase, query, altstart, altend)
   }
 
-  val errorSdmxData = SdmxData(null, null, null, null, "")
+  // val errorSdmxData = SdmxData(null, null, null, null, "")
+  val errorSdmxData = SdmxData(null, null, null, null, "", "", "")
 
-  def getName (tts: PortableTimeSeries): String = {
+  private def getName (tts: PortableTimeSeries): String = {
     tts.getName
   }
 
-  def getTime(tts: PortableTimeSeries): Array[String] = {
+  private def getTime(tts: PortableTimeSeries): Array[String] = {
     tts.getTimeSlotsArray.map(_.toString)
   }
 
-  def dateQtoD (date: String) = {
+  private def dateQtoD (date: String) = {
     val month = ((date.takeRight(1).toInt - 1) * 3 + 1).toString
     val fillzero = "0" * (2 - month.length)
     date.take(4) + "/" + fillzero + month + "/01"
   }
 
-  def modifyDate(date: String) = {
+  private def modifyDate(date: String) = {
     if (date.length == 4) date + "/01/01"
     else if (date.length == 7)
       if (date.contains("Q"))
@@ -75,11 +77,11 @@ object Sdmx extends Controller {
   }
   // Array("1999", "1999-02", "1999-Q2").map(modifyDate)
 
-  def getValues(tts: PortableTimeSeries): Array[String] = {
+  private def getValues(tts: PortableTimeSeries): Array[String] = {
     tts.getObservationsArray.map(_.toString)
   }
 
-  def fillValues(tts: PortableTimeSeries, time: Array[String]): Array[String] = {
+  private def fillValues(tts: PortableTimeSeries, time: Array[String]): Array[String] = {
 
     val emptyVal = List.fill(time.length)("")
     val timeValueRef = (time zip emptyVal).toMap
@@ -102,17 +104,17 @@ object Sdmx extends Controller {
     return output
   }
 
-  def makeRowSeq(row: Int, data: Array[Array[String]]) = {
+  private def makeRowSeq(row: Int, data: Array[Array[String]]) = {
     for (col <- 0 to data.length-1)
     yield data(col)(row)
 
   }
 
-  def makeRow(row: Int, data: Array[Array[String]]) = {
+  private def makeRow(row: Int, data: Array[Array[String]]) = {
     "["+ makeRowSeq(row, data).mkString(",") +"]"
   }
 
-  def makeTable(data: Array[Array[String]]): String = {
+  private def makeTable(data: Array[Array[String]]): String = {
     val tableSeq =
       for (row <- 0 to data(0).length-1)
       yield makeRow(row, data)
@@ -120,7 +122,18 @@ object Sdmx extends Controller {
     return table
   }
 
-  def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]) = {
+  private def stringExtreme(array: Array[String], which: String): Double = {
+    val singleArrayDouble = for (s <- array; if s != "null") yield {
+      s.toDouble
+    }
+    val res =
+      if (which == "max") singleArrayDouble.max
+      // if (which == "max") singleArrayDouble.reduceLeft(_ max _)
+      else singleArrayDouble.min
+    return res
+  }
+
+  private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]) = {
     if ( provider == null ) errorSdmxData
     else try {
 
@@ -143,6 +156,14 @@ object Sdmx extends Controller {
       val timeRef = getTime(res2(indexLongest)).map(modifyDate)
       val valueArray = for (series <- res2) yield fillValues(series, timeRef)
 
+      val maxArray = for (s <- valueArray) yield stringExtreme(s, "max")
+      val nameMax =  nameArray(maxArray.indexOf(maxArray.max))
+      val minArray = for (s <- valueArray) yield stringExtreme(s, "min")
+      val nameMin =  nameArray(minArray.indexOf(minArray.min))
+
+      // val nameMin = "testMin"
+      // val nameMax = "testMax"
+
       val timeRefDate = for (date <- timeRef) yield ("new Date(\"" + date + "\")")
       val dataArray = timeRefDate +: valueArray
 
@@ -150,7 +171,9 @@ object Sdmx extends Controller {
 
       val output = l + ",\n{labels: [ \"" + headerArray.mkString("\",\"") + "\" ] }"
 
-      SdmxData(provider, query, start, end, output)
+      // SdmxData(provider, query, start, end, output)
+      SdmxData(provider, query, start, end, output, nameMin, nameMax)
+      // SdmxData(provider, query, start, end, output, "", "")
     } catch {
       case _: Throwable => errorSdmxData
     }
