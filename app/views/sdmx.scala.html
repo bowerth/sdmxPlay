@@ -10,11 +10,18 @@
     <title>Timeseries for @sd.provider Provider - @sd.query</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!-- DataTables -->
+    <link rel="stylesheet" src="http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <!-- Dygraph -->
     <script src="@routes.Assets.at("javascripts/dygraph/dygraph-combined.js")" type="text/javascript"></script>
+    <!-- 'Submit' button and URI update -->
     <script src="@routes.Assets.at("javascripts/custom/btnconfig.js")" type="text/javascript"></script>
+    <!-- Message Controller -->
     <script type="text/javascript" src="@routes.MessageController.javascriptRoutes"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/custom/message.js")"></script>
-
+    <!-- test SASS module -->
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/datatables.css")">
 </head>
 <body>
     <br>
@@ -117,15 +124,42 @@
             <div class="form-group">
                 <button type="submit" class="btn btn-info" id="getMessageSdmxCodeButton">List Codes</button>
             </div> <!-- form-group -->
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <div class="form-group">
-                <button type="submit" class="btn btn-info" id="clearMessageButton">Reset</button>
-            </div> <!-- form-group -->
+            <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+            <!-- <div class="form-group"> -->
+            <!--     <button type="submit" class="btn btn-info" id="clearMessageButton">Reset</button> -->
+            <!-- </div> <\!-- form-group -\-> -->
         </div> <!-- form-inline -->
 
         <div class="well">
             <!-- <h1>"hello"</h1> -->
         </div>
+
+     </div> <!-- container -->
+
+     <div class="container">
+
+       	<!-- <table id="myTable" class="display"> -->
+	<!--   <thead> -->
+        <!--     <tr> -->
+        <!--       <th></th> -->
+        <!--       <th></th> -->
+        <!--     </tr> -->
+	<!--   </thead> -->
+	<!--   <tbody> -->
+	<!--   </tbody> -->
+	<!-- </table> -->
+
+	<table id="SdmxCodes" class="display">
+	  <thead>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+	  </thead>
+	  <tbody>
+	  </tbody>
+	</table>
+    
     </div> <!-- container -->
 
     <script type="text/javascript">
@@ -136,7 +170,7 @@
       @Html(sd.output)
       );
     </script>
-
+    
     <footer>
       <div class="container">
         <p>using
