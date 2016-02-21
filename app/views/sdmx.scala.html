@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- DataTables -->
-    <link rel="stylesheet" src="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" src="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <!-- Dygraph -->
     <script src="@routes.Assets.at("javascripts/dygraph/dygraph-combined.js")" type="text/javascript"></script>
     <!-- 'Submit' button and URI update -->
@@ -22,6 +22,7 @@
     <script type="text/javascript" src="@routes.Assets.at("javascripts/custom/message.js")"></script>
     <!-- test SASS module -->
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/datatables.css")">
+    
 </head>
 <body>
     <br>
@@ -114,7 +115,8 @@
             &nbsp;&nbsp;&nbsp;&nbsp;
             <div class="form-group">
                 <label for="inputPattern">pattern (case-sensitive)<br />wildcard: *, or |</label>
-                <input type="text" class="form-control" id="inputPattern" value="*_PUB|EXR"/>
+                <!-- <input type="text" class="form-control" id="inputPattern" value="*_PUB|EXR"/> -->
+                <input type="text" class="form-control" id="inputPattern" value=""/>
             </div> <!-- form-group -->
             &nbsp;&nbsp;&nbsp;&nbsp;
             <div class="form-group">
@@ -138,18 +140,8 @@
 
      <div class="container">
 
-       	<!-- <table id="myTable" class="display"> -->
-	<!--   <thead> -->
-        <!--     <tr> -->
-        <!--       <th></th> -->
-        <!--       <th></th> -->
-        <!--     </tr> -->
-	<!--   </thead> -->
-	<!--   <tbody> -->
-	<!--   </tbody> -->
-	<!-- </table> -->
-
-	<table id="SdmxCodes" class="display">
+       <div id="SdmxFlowsDiv">
+	<table id="SdmxFlows" class="display">
 	  <thead>
             <tr>
               <th></th>
@@ -159,18 +151,32 @@
 	  <tbody>
 	  </tbody>
 	</table>
-    
+	</div>
+
+       <div id="SdmxCodesDiv">
+	<table id="SdmxCodes" class="display">
+	  <thead>
+            <tr>
+	      <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+	  </thead>
+	  <tbody>
+	  </tbody>
+	</table>
+	</div>
+
     </div> <!-- container -->
 
-    <script type="text/javascript">
-        g = new Dygraph(
-      // containing div
-      document.getElementById("graphdiv"),
-      // "@routes.Assets.at("data/sdmx/tsdata.csv")"
-      @Html(sd.output)
-      );
-    </script>
-    
+     <script type="text/javascript">
+       g = new Dygraph(
+       // containing div
+       document.getElementById("graphdiv"),
+       @Html(sd.output)
+       );
+     </script>
+
     <footer>
       <div class="container">
         <p>using

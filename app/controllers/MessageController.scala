@@ -19,6 +19,7 @@ object MessageController extends Controller {
   implicit val fooWrites = Json.writes[Message]
 
   private def tuple2ToList[T](t: (T,T)): List[T] = List(t._1, t._2)
+  private def tuple3ToList[T](t: (T,T,T)): List[T] = List(t._1, t._2, t._3)
 
   private def arrayToMap(array: Array[String], colnames: Array[String]) = {
     // val colnames = Array("id", "codes")
@@ -53,15 +54,46 @@ object MessageController extends Controller {
   }
 
   def getMessageSdmxCode(provider: String, flow: String) = Action {
+
     // val provider = "ECB"
     // val flow = "EXR"
+
     val dimensions = getSdmxDimension(provider, flow).dimension_id
-    val codes = for (dim <- dimensions) yield getSdmxCode(provider, flow, dim).code_id.mkString(" + ")
-    val combineTuple = dimensions zip codes
-    val combine = for (c <- combineTuple) yield tuple2ToList(c).toArray
-    val colnames = Array("id", "codes")
-    val arrayJson = for (s <- combine) yield toJson(arrayToMap(s, colnames))
+    // val codes = for (dim <- dimensions) yield getSdmxCode(provider, flow, dim).code_id.mkString(" + ")
+
+    // val dim = dimensions(0)
+    def codecombine(dim: String) = {
+      val codeid = getSdmxCode(provider, flow, dim).code_id
+      val codelabel = getSdmxCode(provider, flow, dim).code_label
+      val combineTuple = codeid zip codelabel
+      val dimrep = List.fill(codeid.length)(dim)
+      val prepended = dimrep.zip(combineTuple).map { case (i, (a, b)) => (i, a, b) }
+      val combine = for (c <- prepended) yield tuple3ToList(c).toArray
+      combine
+    }
+
+    val test = for (dim <- dimensions) yield codecombine(dim)
+    val testflat = test.flatten
+
+    // val freqcode = codecombine("FREQ")
+    // val exrtypecode = codecombine(dimensions(3))
+    // freqcode ::: exrtypecode
+
+    val colnames = Array("dim", "id", "label")
+    val arrayJson = for (s <- testflat) yield toJson(arrayToMap(s, colnames))
     val jsontest = Json.toJson(Map("value" -> toJson(arrayJson)))
+    // println(jsontest)
+    // codes
+    // val codelabels = for (dim <- dimensions) yield getSdmxCode(provider, flow, dim).code_label.mkString(" + ")
+
+    // val combineTuple = dimensions zip codes
+
+    // val combineTuple = codes zip codelabels
+
+    // val combine = for (c <- combineTuple) yield tuple2ToList(c).toArray
+    // val colnames = Array("id", "codes")
+    // val arrayJson = for (s <- combine) yield toJson(arrayToMap(s, colnames))
+    // val jsontest = Json.toJson(Map("value" -> toJson(arrayJson)))
 
     // val jsontest = Json.toJson(
     //   Map(
