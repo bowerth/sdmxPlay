@@ -22,4 +22,5 @@ target/
 
 activator*
 
+# remove files: rm $(find . -name '*.*~')
 *.*~

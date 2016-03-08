@@ -8,10 +8,10 @@ import it.bancaditalia.oss.sdmx.api.PortableTimeSeries
 import utils.LeftOuterJoinMap
 import scala.collection.immutable.ListMap
 
-object Sdmx extends Controller {
+object SdmxSeries extends Controller {
 
   def redirect(provider: String, query: String, start: Option[String], end: Option[String]) = Action { implicit request =>
-    Redirect(routes.Sdmx.main(provider, query, start, end))
+    Redirect(routes.SdmxSeries.main(provider, query, start, end))
   }
 
   def index = Action { implicit request =>
@@ -19,7 +19,7 @@ object Sdmx extends Controller {
     val provider = "ECB"
     val start = Option[String](null)
     val end = Option[String](null)
-    Redirect(routes.Sdmx.main(provider, query, start, end))
+    Redirect(routes.SdmxSeries.main(provider, query, start, end))
   }
 
   def main(provider: String, query: String, start: Option[String], end: Option[String]) = Action {

@@ -2,9 +2,9 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                                controllers.Sdmx.index
-GET     /:provider/:query/               controllers.Sdmx.main(provider: String, query: String, start: Option[String], end: Option[String])
-GET     /:provider/:query                controllers.Sdmx.redirect(provider: String, query: String, start: Option[String], end: Option[String])
+GET     /                                controllers.SdmxSeries.index
+GET     /:provider/:query/               controllers.SdmxSeries.main(provider: String, query: String, start: Option[String], end: Option[String])
+GET     /:provider/:query                controllers.SdmxSeries.redirect(provider: String, query: String, start: Option[String], end: Option[String])
 
 # GET     /message                    	 controllers.MessageController.getMessage()
 GET     /messagesdmxprovider             controllers.MessageController.getMessageSdmxProvider()
