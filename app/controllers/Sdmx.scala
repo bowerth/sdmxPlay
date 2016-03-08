@@ -5,7 +5,6 @@ import play.api.mvc._
 import models.SdmxData
 import it.bancaditalia.oss.sdmx.client.SdmxClientHandler
 import it.bancaditalia.oss.sdmx.api.PortableTimeSeries
-
 import utils.LeftOuterJoinMap
 import scala.collection.immutable.ListMap
 
@@ -50,99 +49,100 @@ object Sdmx extends Controller {
   // val errorSdmxData = SdmxData(null, null, null, null, "")
   val errorSdmxData = SdmxData(null, null, null, null, "", "", "")
 
-  private def getName (tts: PortableTimeSeries): String = {
-    tts.getName
-  }
-
-  private def getTime(tts: PortableTimeSeries): Array[String] = {
-    tts.getTimeSlotsArray.map(_.toString)
-  }
-
-  private def dateQtoD (date: String) = {
-    val month = ((date.takeRight(1).toInt - 1) * 3 + 1).toString
-    val fillzero = "0" * (2 - month.length)
-    date.take(4) + "/" + fillzero + month + "/01"
-  }
-
-  private def modifyDate(date: String) = {
-    if (date.length == 4) date + "/01/01"
-    else if (date.length == 7)
-      if (date.contains("Q"))
-        dateQtoD(date)
-      else
-        // date + "/01"
-        date.replace("-", "/") + "/01"
-    else
-      date
-  }
-  // Array("1999", "1999-02", "1999-Q2").map(modifyDate)
-
-  private def getValues(tts: PortableTimeSeries): Array[String] = {
-    tts.getObservationsArray.map(_.toString)
-  }
-
-  private def fillValues(tts: PortableTimeSeries, time: Array[String]): Array[String] = {
-
-    val emptyVal = List.fill(time.length)("")
-    val timeValueRef = (time zip emptyVal).toMap
-
-    val timeA = getTime(tts).map(modifyDate)
-    val valueA = getValues(tts)
-    val timeValueA = (timeA zip valueA).toMap
-
-    val joined = (new LeftOuterJoinMap(timeValueRef, timeValueA)).join
-    val joinedSorted = ListMap(joined.toSeq.sortBy(_._1):_*)
-
-    val joinedArray = joinedSorted.flatMap(e => List(e._2._2)).toArray
-
-    val output =
-      for (field <- joinedArray) yield {
-        if (field.isEmpty) "null"
-        else field.get.toString
-      }
-
-    return output
-  }
-
-  private def makeRowSeq(row: Int, data: Array[Array[String]]) = {
-    for (col <- 0 to data.length-1)
-    yield data(col)(row)
-
-  }
-
-  private def makeRow(row: Int, data: Array[Array[String]]) = {
-    "["+ makeRowSeq(row, data).mkString(",") +"]"
-  }
-
-  private def makeTable(data: Array[Array[String]]): String = {
-    val tableSeq =
-      for (row <- 0 to data(0).length-1)
-      yield makeRow(row, data)
-    val table = "[\n"+ tableSeq.mkString(",\n") +"\n]"
-    return table
-  }
-
-  private def stringExtreme(array: Array[String], which: String): Double = {
-    val singleArrayDouble = for (s <- array; if s != "null") yield {
-      s.toDouble
-    }
-    val res =
-      if (which == "max") singleArrayDouble.max
-      // if (which == "max") singleArrayDouble.reduceLeft(_ max _)
-      else singleArrayDouble.min
-    return res
-  }
-
   private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]) = {
     if ( provider == null ) errorSdmxData
     else try {
 
-      // val query = "EXR.A+Q.USD+GBP.EUR.SP00.A"
-      // val query = "EXR.A+Q+M.USD+GBP.EUR.SP00.A"
+      def getName (tts: PortableTimeSeries): String = {
+        tts.getName
+      }
+
+      def getTime(tts: PortableTimeSeries): Array[String] = {
+        tts.getTimeSlotsArray.map(_.toString)
+      }
+
+      def modifyDate(date: String) = {
+
+        def dateQtoD (date: String) = {
+          val month = ((date.takeRight(1).toInt - 1) * 3 + 1).toString
+          val fillzero = "0" * (2 - month.length)
+          date.take(4) + "/" + fillzero + month + "/01"
+        }
+
+        if (date.length == 4) date + "/01/01"
+        else if (date.length == 7)
+
+        if (date.contains("Q"))
+          dateQtoD(date)
+        else
+          // date + "/01"
+          date.replace("-", "/") + "/01"
+        else
+          date
+      }
+      // Array("1999", "1999-02", "1999-Q2").map(modifyDate)
+
+      def makeRowSeq(row: Int, data: Array[Array[String]]) = {
+        for (col <- 0 to data.length-1)
+        yield data(col)(row)
+      }
+
+      def makeRow(row: Int, data: Array[Array[String]]) = {
+        "["+ makeRowSeq(row, data).mkString(",") +"]"
+      }
+
+      def makeTable(data: Array[Array[String]]): String = {
+
+        val tableSeq =
+          for (row <- 0 to data(0).length-1)
+          yield makeRow(row, data)
+        val table = "[\n"+ tableSeq.mkString(",\n") +"\n]"
+        return table
+      }
+
+      def stringExtreme(array: Array[String], which: String): Double = {
+        val singleArrayDouble = for (s <- array; if s != "null") yield {
+          s.toDouble
+        }
+        val res =
+          if (which == "max") singleArrayDouble.max
+        // if (which == "max") singleArrayDouble.reduceLeft(_ max _)
+          else singleArrayDouble.min
+        return res
+      }
+
+      def fillValues(tts: PortableTimeSeries, time: Array[String]): Array[String] = {
+
+        def getValues(tts: PortableTimeSeries): Array[String] = {
+          tts.getObservationsArray.map(_.toString)
+        }
+
+        val emptyVal = List.fill(time.length)("")
+        val timeValueRef = (time zip emptyVal).toMap
+        val timeA = getTime(tts).map(modifyDate)
+        val valueA = getValues(tts)
+        val timeValueA = (timeA zip valueA).toMap
+        val joined = (new LeftOuterJoinMap(timeValueRef, timeValueA)).join
+        val joinedSorted = ListMap(joined.toSeq.sortBy(_._1):_*)
+        val joinedArray = joinedSorted.flatMap(e => List(e._2._2)).toArray
+        val output =
+          for (field <- joinedArray) yield {
+            if (field.isEmpty) "null"
+            else field.get.toString
+          }
+        return output
+      }
+
+      // // val query = "EXR.A+Q.USD+GBP.EUR.SP00.A"
+      // // val query = "EXR.A+Q+M.USD+GBP.EUR.SP00.A"
       // val query = "EXR.M.USD+GBP.EUR.SP00.A"
+      // val query = "EXR.M.*.EUR.SP00.A"
       // val provider = "ECB"
-      // val start = Option[String]("2002")
-      // val end = Option[String]("2004")
+      // val query = "QNA.AUT.B1G.CQR.Q"
+      // QNA.AUT+DEU+FIN+DNK+SWE+USA.B1G.VNBQR+VNBARSA+VIXNBSA+LNBQRSA+DOBSA+CTQRGPSA+CPCARSA+VOBARSA+VIXOBSA+CUR+CARSA+GRW+CD+VNBQRSA+HRSSA+POP+CAR+IND+HCPCARSA+VNBAR+CQRSA+LNBARSA+GYSA+GPSA+LNBQR+VOL+PERSA+CQR+HVPVOBARSA+VPVOBARSA+DNBSA+HRS+PER.Q
+      // val provider = "OECD"
+      // val start = Option[String]("2000")
+      // val end = Option[String]("2015")
 
       val res = SdmxClientHandler.getTimeSeries(provider, query, start.get, end.get)
       val res2 = res.toArray.

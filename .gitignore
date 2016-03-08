@@ -1,22 +1,24 @@
 /logs
-/target
+target/
 /.idea
 /.idea_modules
 /.classpath
 /.project
 /.settings
 /RUNNING_PID
-/.ensime*
 # /lib
-/project/.ensime
-# /project/target
+
+# also covers .ensime_cache/
+.ensime* 
+# .ensime
+
+# /project/.ensime
 /project/EnsimeProjectSettings.scala
 # /project
 /test
 /docs
 
-/project/target
-/project/project/target
+*#*
 
 activator*
 

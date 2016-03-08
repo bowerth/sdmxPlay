@@ -1,8 +1,6 @@
 package controllers
 
 import play.api.mvc._
-// import scala.io.Source
-// import java.io._
 
 import models.SdmxProvider
 import models.SdmxFlow
@@ -10,39 +8,10 @@ import models.SdmxDimension
 import models.SdmxCode
 import it.bancaditalia.oss.sdmx.client.SdmxClientHandler
 import it.bancaditalia.oss.sdmx.api.Dimension
-// import it.bancaditalia.oss.sdmx.api.PortableTimeSeries
 
 import scala.collection.JavaConversions.mapAsScalaMap
-// import scala.collection.JavaConversions.asScalaSet
-// import utils.LeftOuterJoinMap
-// import scala.collection.immutable.ListMap
 
 object SdmxMeta extends Controller {
-
-  // def redirect(provider: String, query: String, start: Option[String], end: Option[String]) = Action { implicit request =>
-  //   Redirect(routes.Sdmx.main(provider, query, start, end))
-  // }
-
-  // def index = Action { implicit request =>
-  //   val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A"
-  //   val provider = "ECB"
-  //   val start = Option[String](null)
-  //   val end = Option[String](null)
-  //   // Redirect(routes.Sdmx.main("ECB", queryECB, Option[String](null), Option[String](null)))
-  //   Redirect(routes.Sdmx.main(provider, query, start, end))
-  // }
-
-  // def main(provider: String, query: String, start: Option[String], end: Option[String]) = Action {
-  //   val (prov, qy, st, ed) = validateSdmx(provider, query, start, end)
-
-  //   val sd = getSdmxData(prov, qy, st, ed)
-  //   val sdView =
-  //     if ( sd.provider == null )
-  //       SdmxData(provider.toUpperCase, query, start, end, "")
-  //       // SdmxData(provider.toUpperCase,query,start,end)
-  //     else sd
-  //   Ok(views.html.sdmx(sdView))
-  // }
 
   val errorSdmxProvider = SdmxProvider("")
   //
@@ -66,6 +35,8 @@ object SdmxMeta extends Controller {
     else try {
 
       // val provider = "ECB"
+      // val provider = "OECD"
+      // val provider = "OECD_RESTR"
       // val pattern = ""
       // val pattern = "rail"
       // pattern
