@@ -6,11 +6,12 @@ GET     /                                controllers.SdmxSeries.index
 GET     /:provider/:query/               controllers.SdmxSeries.main(provider: String, query: String, start: Option[String], end: Option[String])
 GET     /:provider/:query                controllers.SdmxSeries.redirect(provider: String, query: String, start: Option[String], end: Option[String])
 
-# GET     /message                    	 controllers.MessageController.getMessage()
+GET     /getdownloadsdmx                 controllers.MessageController.getDownloadSdmx()
+# GET     /:provider/:query/               controllers.MessageController.getDownloadSdmx(provider: String, query: String)
+
 GET     /messagesdmxprovider             controllers.MessageController.getMessageSdmxProvider()
-# GET   /messagesdmxflow            	 controllers.MessageController.getMessageSdmxFlow()
 GET     /messagesdmxflow             	 controllers.MessageController.getMessageSdmxFlow(provider: String, pattern: String)
-GET     /messagesdmxdimension             	 controllers.MessageController.getMessageSdmxDimension(provider: String, flow: String)
+GET     /messagesdmxdimension            controllers.MessageController.getMessageSdmxDimension(provider: String, flow: String)
 GET     /messagesdmxcode             	 controllers.MessageController.getMessageSdmxCode(provider: String, flow: String)
 
 GET     /assets/javascripts/routes  	 controllers.MessageController.javascriptRoutes()	

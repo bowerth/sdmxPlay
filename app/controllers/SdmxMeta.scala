@@ -15,7 +15,7 @@ object SdmxMeta extends Controller {
 
   val errorSdmxProvider = SdmxProvider("")
   //
-  def getSdmxProvider(): models.SdmxProvider = {
+  def getSdmxProvider(): SdmxProvider = {
     try {
       val res = SdmxClientHandler.getProviders()
       val output = res.toArray.mkString(", ")
@@ -30,7 +30,7 @@ object SdmxMeta extends Controller {
 
   val errorSdmxFlow = SdmxFlow(null, Array[String](""), Array[String](""))
   //
-  def getSdmxFlow(provider: String, pattern: String): models.SdmxFlow = {
+  def getSdmxFlow(provider: String, pattern: String): SdmxFlow = {
     if ( provider == null ) errorSdmxFlow
     else try {
 
@@ -62,7 +62,7 @@ object SdmxMeta extends Controller {
 
   val errorSdmxDimension = SdmxDimension(null, null, Array[String](""))
   //
-  def getSdmxDimension(provider: String, flow: String): models.SdmxDimension = {
+  def getSdmxDimension(provider: String, flow: String): SdmxDimension = {
     if ( provider == null || flow == null ) errorSdmxDimension
     else try {
 
@@ -84,7 +84,7 @@ object SdmxMeta extends Controller {
 
   val errorSdmxCode = SdmxCode(null, null, null, Array[String](""), Array[String](""))
   //
-  def getSdmxCode(provider: String, flow: String, dimension: String): models.SdmxCode = {
+  def getSdmxCode(provider: String, flow: String, dimension: String): SdmxCode = {
     if ( provider == null || flow == null || dimension == null ) errorSdmxCode
     else try {
 

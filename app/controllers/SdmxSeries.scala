@@ -8,6 +8,10 @@ import it.bancaditalia.oss.sdmx.api.PortableTimeSeries
 import utils.LeftOuterJoinMap
 import scala.collection.immutable.ListMap
 
+import java.io.PrintWriter
+import java.io.File
+import utils.PrintFile.withPrintWriter
+
 object SdmxSeries extends Controller {
 
   def redirect(provider: String, query: String, start: Option[String], end: Option[String]) = Action { implicit request =>
@@ -49,7 +53,7 @@ object SdmxSeries extends Controller {
   // val errorSdmxData = SdmxData(null, null, null, null, "")
   val errorSdmxData = SdmxData(null, null, null, null, "", "", "")
 
-  private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]) = {
+  private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]): SdmxData = {
     if ( provider == null ) errorSdmxData
     else try {
 
@@ -87,16 +91,22 @@ object SdmxSeries extends Controller {
         yield data(col)(row)
       }
 
-      def makeRow(row: Int, data: Array[Array[String]]) = {
-        "["+ makeRowSeq(row, data).mkString(",") +"]"
+      def makeRow(row: Int, data: Array[Array[String]], brackets: Boolean) = {
+        if (brackets == true)
+          "["+ makeRowSeq(row, data).mkString(",") +"]"
+        else
+          makeRowSeq(row, data).mkString(",")
       }
 
-      def makeTable(data: Array[Array[String]]): String = {
-
+      def makeTable(data: Array[Array[String]], brackets: Boolean): String = {
         val tableSeq =
           for (row <- 0 to data(0).length-1)
-          yield makeRow(row, data)
-        val table = "[\n"+ tableSeq.mkString(",\n") +"\n]"
+          yield makeRow(row, data, brackets)
+        val table =
+          if (brackets == true)
+            "[\n"+ tableSeq.mkString(",\n") +"\n]"
+          else
+            tableSeq.mkString(",\n")
         return table
       }
 
@@ -111,7 +121,7 @@ object SdmxSeries extends Controller {
         return res
       }
 
-      def fillValues(tts: PortableTimeSeries, time: Array[String]): Array[String] = {
+      def fillValues(tts: PortableTimeSeries, time: Array[String], fill: String): Array[String] = {
 
         def getValues(tts: PortableTimeSeries): Array[String] = {
           tts.getObservationsArray.map(_.toString)
@@ -127,14 +137,14 @@ object SdmxSeries extends Controller {
         val joinedArray = joinedSorted.flatMap(e => List(e._2._2)).toArray
         val output =
           for (field <- joinedArray) yield {
-            if (field.isEmpty) "null"
+            if (field.isEmpty) fill
             else field.get.toString
           }
         return output
       }
 
-      // // val query = "EXR.A+Q.USD+GBP.EUR.SP00.A"
-      // // val query = "EXR.A+Q+M.USD+GBP.EUR.SP00.A"
+      // val query = "EXR.A+Q.USD+GBP.EUR.SP00.A"
+      // val query = "EXR.A+Q+M.USD+GBP.EUR.SP00.A"
       // val query = "EXR.M.USD+GBP.EUR.SP00.A"
       // val query = "EXR.M.*.EUR.SP00.A"
       // val provider = "ECB"
@@ -154,7 +164,7 @@ object SdmxSeries extends Controller {
       val seriesLength = for (series <- res2) yield getTime(series).length
       val indexLongest = seriesLength.indexOf(seriesLength.max)
       val timeRef = getTime(res2(indexLongest)).map(modifyDate)
-      val valueArray = for (series <- res2) yield fillValues(series, timeRef)
+      val valueArray = for (series <- res2) yield fillValues(series, timeRef, "null")
 
       val maxArray = for (s <- valueArray) yield stringExtreme(s, "max")
       val nameMax =  nameArray(maxArray.indexOf(maxArray.max))
@@ -164,15 +174,25 @@ object SdmxSeries extends Controller {
       // val nameMin = "testMin"
       // val nameMax = "testMax"
 
+      // JavaScript data format for dygraphs
       val timeRefDate = for (date <- timeRef) yield ("new Date(\"" + date + "\")")
       val dataArray = timeRefDate +: valueArray
-
-      val l = makeTable(data = dataArray)
-
+      val l = makeTable(data = dataArray, brackets = true)
       val output = l + ",\n{labels: [ \"" + headerArray.mkString("\",\"") + "\" ] }"
 
+      // csv data format for download
+      val file = new File("output.csv")
+      // val file = new File(provider +"-"+ query.split("[.]")(0) +".csv")
+      val valueArrayCsv = for (series <- res2) yield fillValues(series, timeRef, "")
+      val dataArrayCsv = timeRef +: valueArrayCsv
+      val lcsv = makeTable(data = dataArrayCsv, brackets = false)
+      withPrintWriter(file) {
+        writer => writer.println(headerArray.mkString(",") +"\n"+ lcsv)
+      }
+
+      // function return value
       // SdmxData(provider, query, start, end, output)
-      SdmxData(provider, query, start, end, output, nameMin, nameMax)
+      return SdmxData(provider, query, start, end, output, nameMin, nameMax)
       // SdmxData(provider, query, start, end, output, "", "")
     } catch {
       case _: Throwable => errorSdmxData

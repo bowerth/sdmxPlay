@@ -41,7 +41,7 @@ $(function() {
 		    // ],
 		    data: data.value,
 		    columns:[
-			{title: "ID", data: 'id'},
+			{title: "ID", data: "id"},
 			{title: "Label", data: "label"}
 		    ]
 		});

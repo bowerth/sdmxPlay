@@ -20,6 +20,8 @@ target/
 
 *#*
 
+output.csv
+
 activator*
 
 # remove files: rm $(find . -name '*.*~')

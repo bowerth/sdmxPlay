@@ -14,12 +14,6 @@ class LeftOuterJoinMap[K, V1, V2](map1: Map[K, V1], map2: Map[K, V2]) {
   type JoinValue = Tuple2[Option[V1], Option[V2]]
 
   def join: Map[K, JoinValue] = {
-    // map1.map {case (k1, v1) =>
-    // 	map2.get(k1) match {
-    // 		case v2: Some[V2] => (k1 -> (Some(v1), v2))
-    // 		case None => (k1 -> (Some(v1), None))
-    // 	}
-    // }
     map1.map { case (k, v) => (k -> ((Some(v), map2.get(k)): (Option[V1], Option[V2]))) }
   }
 }

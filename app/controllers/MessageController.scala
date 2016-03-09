@@ -12,6 +12,10 @@ import controllers.SdmxMeta.getSdmxCode
 
 import scala.collection.breakOut
 
+import java.io.File
+// import java.io.PrintWriter
+// import utils.PrintFile.withPrintWriter
+
 case class Message(value: String)
 
 object MessageController extends Controller {
@@ -24,6 +28,20 @@ object MessageController extends Controller {
   private def arrayToMap(array: Array[String], colnames: Array[String]) = {
     // val colnames = Array("id", "codes")
       (colnames zip array).toMap
+  }
+
+  // def getDownloadSdmx(provider: String, query: String) = Action {
+  def getDownloadSdmx = Action {
+
+    // val res = Array[String]("a", "b")
+    val file = new File("output.csv")
+    // val file = new File(provider +"-"+ query.split("[.]")(0) +".csv")
+
+    Ok.sendFile(
+      content = file,
+      // fileName = _ => "test.txt"
+      fileName = _ => file.getName
+    )
   }
 
   def getMessageSdmxProvider = Action {
@@ -121,7 +139,8 @@ object MessageController extends Controller {
       controllers.routes.javascript.MessageController.getMessageSdmxProvider,
       controllers.routes.javascript.MessageController.getMessageSdmxFlow,
       controllers.routes.javascript.MessageController.getMessageSdmxDimension,
-      controllers.routes.javascript.MessageController.getMessageSdmxCode
+      controllers.routes.javascript.MessageController.getMessageSdmxCode,
+      controllers.routes.javascript.MessageController.getDownloadSdmx
     )).as("text/javascript")
   }
 
