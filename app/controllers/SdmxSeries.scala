@@ -16,9 +16,11 @@ object SdmxSeries extends Controller {
   }
 
   def index = Action { implicit request =>
-    val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A"
+    // val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A"
+    val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.*"
     val provider = "ECB"
-    val start = Option[String](null)
+    // val start = Option[String](null)
+    val start = Option[String]("1999")
     val end = Option[String](null)
     Redirect(routes.SdmxSeries.main(provider, query, start, end))
   }
