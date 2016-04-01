@@ -7,7 +7,6 @@ GET     /:provider/:query/               controllers.SdmxSeries.main(provider: S
 GET     /:provider/:query                controllers.SdmxSeries.redirect(provider: String, query: String, start: Option[String], end: Option[String])
 
 GET     /getdownloadsdmx                 controllers.MessageController.getDownloadSdmx()
-# GET     /:provider/:query/               controllers.MessageController.getDownloadSdmx(provider: String, query: String)
 
 GET     /messagesdmxprovider             controllers.MessageController.getMessageSdmxProvider()
 GET     /messagesdmxflow             	 controllers.MessageController.getMessageSdmxFlow(provider: String, pattern: String)

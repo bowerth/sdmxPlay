@@ -27,12 +27,10 @@ object SdmxSeriesHelper {
         if (date.contains("Q"))
           dateQtoD(date)
         else
-          // date + "/01"
           date.replace("-", "/") + "/01"
         else
           date
       }
-      // Array("1999", "1999-02", "1999-Q2").map(modifyDate)
 
       def makeRowSeq(row: Int, data: Array[Array[String]]) = {
         for (col <- 0 to data.length-1)
@@ -64,7 +62,6 @@ object SdmxSeriesHelper {
         }
         val res =
           if (which == "max") singleArrayDouble.max
-        // if (which == "max") singleArrayDouble.reduceLeft(_ max _)
           else singleArrayDouble.min
         return res
       }

@@ -16,10 +16,4 @@ object PrintFile {
     }
   }
 
-  // val file = new File("date.txt")
-  // withPrintWriter(file) {
-  //   writer => writer.println(new java.util.Date)
-  // }
-
 }
-
