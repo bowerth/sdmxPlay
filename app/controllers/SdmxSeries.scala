@@ -17,10 +17,13 @@ object SdmxSeries extends Controller {
 
   def index = Action { implicit request =>
     // val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A"
-    val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.*"
-    val provider = "ECB"
+    // val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.*"
+    // val provider = "ECB"
+    // val start = Option[String]("1999")
+    val query = "CNA-2005-FBCF-SI-A17.S11ES14AA.*.IPCH"
+    val provider = "INSEE"
     // val start = Option[String](null)
-    val start = Option[String]("1999")
+    val start = Option[String]("1950")
     val end = Option[String](null)
     Redirect(routes.SdmxSeries.main(provider, query, start, end))
   }
@@ -30,7 +33,7 @@ object SdmxSeries extends Controller {
     val sd = getSdmxData(prov, qy, st, ed)
     val sdView =
       if ( sd.provider == null )
-        SdmxData(provider.toUpperCase, query, start, end, "", "", "")
+        SdmxData(provider.toUpperCase, query, start, end, "", "", "", "")
       else sd
     Ok(views.html.sdmx(sdView))
   }
@@ -47,7 +50,7 @@ object SdmxSeries extends Controller {
     (provider.toUpperCase, query, altstart, altend)
   }
 
-  val errorSdmxData = SdmxData(null, null, null, null, "", "", "")
+  val errorSdmxData = SdmxData(null, null, null, null, "", "", "", "")
 
   private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]): SdmxData = {
     if ( provider == null ) errorSdmxData
@@ -69,7 +72,8 @@ object SdmxSeries extends Controller {
       val timeRefDate = for (date <- timeRef) yield ("new Date(\"" + date + "\")")
       val dataArray = timeRefDate +: valueArray
       val l = makeTable(data = dataArray, brackets = true)
-      val output = l + ",\n{labels: [ \"" + headerArray.mkString("\",\"") + "\" ] }"
+      val output = l
+      val labels = "[ \"" + headerArray.mkString("\",\"") + "\" ]"
       // csv data format for download
       val file = new File("output.csv")
       val valueArrayCsv = for (series <- res2) yield fillValues(series, timeRef, "")
@@ -79,7 +83,7 @@ object SdmxSeries extends Controller {
         writer => writer.println(headerArray.mkString(",") +"\n"+ lcsv)
       }
       // function return value
-      return SdmxData(provider, query, start, end, output, nameMin, nameMax)
+      return SdmxData(provider, query, start, end, output, labels, nameMin, nameMax)
     } catch {
       case _: Throwable => errorSdmxData
     }

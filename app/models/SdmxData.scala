@@ -6,6 +6,7 @@ case class SdmxData(
   start: Option[String],
   end: Option[String],
   output: String,
+  labels: String,
   min: String,
   max: String
 )

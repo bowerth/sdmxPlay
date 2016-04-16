@@ -15,6 +15,7 @@
     <script type="text/javascript" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <!-- Dygraph -->
     <script src="@routes.Assets.at("javascripts/dygraph/dygraph-combined.js")" type="text/javascript"></script>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dygraphs.css")">
     <!-- 'Submit' button and URI update -->
     <script src="@routes.Assets.at("javascripts/custom/btnconfig.js")" type="text/javascript"></script>
     <!-- Message Controller -->
@@ -26,6 +27,16 @@
   </head>
   <body>
     <br>
+
+    <div class="container">
+      <div class="col-sm-12">
+        <h1>SDMX Play application</h1>
+        <p>Scala Play application using <a href="https://github.com/amattioc/SDMX">SDMX</a> Java functions and <a href="https://github.com/danvk/dygraphs">dygraphs</a> timeseries visualization.</p>
+        <p>This application retrieves time series available from SDMX APIs. The SDMX query can either be specified through the user interface or by modification of the URL. The SDMX provider is henceforth contacted with the query and in case of existing time series returns information transformed into a JavaScript data format for display and download.</p>
+        <p>To facilitate defining the query, available dimension members can be displayed for the selected flow and provider.</p>
+      </div>
+    </div>
+
     <div class="container">
       <div class="panel panel-info">
         <div class="panel panel-heading">
@@ -37,7 +48,7 @@
             Invalid query or data not found.
           </div>          
           } else {
-          <div id="graphdiv" style="width:100%; height:300px;">
+          <div class="many" id="graphdiv" style="width:100%; height:300px;">
           </div>
           }
 
@@ -97,7 +108,7 @@
         <div class="col-sm-12">
           <form class="form-horizontal" action="@routes.MessageController.getDownloadSdmx()" method="get">
             <div class="form-group">
-              <button type="submit" class="btn btn-info" id="btnDownloadSdmx">Download</button>
+              <button type="submit" class="btn btn-info" id="btnDownloadSdmx">Download CSV</button>
             </div> <!-- form-group -->
           </form>
         </div> 
@@ -127,29 +138,17 @@
           <div class="form-group">
             <button type="submit" class="btn btn-info" id="getMessageSdmxCodeButton">List Codes</button>
           </div> <!-- form-group -->
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <div class="form-group">
+            <button type="submit" class="btn btn-info" id="getMessageSdmxHelpButton">Help</button>
+          </div> <!-- form-group -->
         </div> <!-- form-inline -->
 
         <div class="well">
-          <h3>sdmxPlay</h3>
-          <p>Please find below a quick overview of the functionality. This information will disappear when clicking one of the "List" buttons above. To bring it back, simply reload the page using F5.</p>
-          <h4>Site URL</h4>
-          <p>The URL is linked to the "Provider Code" and "Query" text input fields. For example, /ECB/EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A/ corresponds to Provider Code "ECB" and Query "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A".</p>
-          <h4>Time Series Chart</h4>
-          <p>If the selected query returns a time series with frequency that can be parsed by the implemented date transformation functions (Annual, Quarterly, Monthly), it will be displayed using dygraphs. Using mouse click-and-drag, the user can zoom in horizontally or vertically. The time series chart display can be reset with a double-click.</p>
-          <h4>Min and Max Series</h4>
-          <p>When selecting a large number of series and displaying actual values (e.g. instead of growth rates), one can easily identify the series with highest and lowest values returned by the query from the "Min Series" and "Max Series" fields.</p>
-          <h4>Query</h4>
-          <p>Enter a valid SDMX query where the format is depending on the data flow: [FLOW . ] FREQ . CURRENCY . CURRENCY_DENOM . EXR_TYPE . EXR_SUFFIX. The dimensions of a flow can be retrieved using the "List Dimensions" button. E.g. to retrieve the dimensions of AMECO flow by ECB, simply replace "EXR" in the Query field with "AMECO" and click "List Dimensions". If interested in all members for one or more dimension, use "*" e.g. "EXR.A.*.EUR.SP00.A" returns all available currencies in the flow, currently 44.</p>
-          <h4>Provider Code</h4>
-          <p>Valid provider codes can be retrieved using the "List Providers" button. Please refer to the underlying SDMX Connectors linked at the bottom of the page for additional information.</p>
-          <h4>Start and End Date</h4>
-          <p>Limit the query to a specific time range (at the moment only accepting format "yyyy"). This is reflected in the URL via an option parameter "?start=1999"</p>
-          <h4>Download</h4>
-          <p>Returns a csv file with time series in columns. The first column contains the date information in ascending order. When opened with spreadsheet programs (e.g. gnumeric or LibreOffice Calc), a line chart can be generated with ease.</p>
-          <h4>Flow Pattern</h4>
-          <p>Limit the list of returned flows for selected provider e.g. "EXR*|*PUB" will return all flows starting with "EXR" or ending with "PUB".</p>
-          <h4>List Codes</h4>
-          <p>List potentially available dimensions members for each dimensions.</p>
+          <!-- <h1>SDMX Play application</h1> -->
+          <!-- <p>Scala Play application using <a href="https://github.com/amattioc/SDMX">SDMX</a> Java functions and <a href="https://github.com/danvk/dygraphs">dygraphs</a> timeseries visualization.</p> -->
+          <!-- <p>This application retrieves time series available from SDMX APIs. The SDMX query can either be specified through the user interface or by modification of the URL. The SDMX provider is henceforth contacted with the query and in case of existing time series returns information transformed into a JavaScript data format for display and download.</p> -->
+          <!-- <p>To facilitate defining the query, available dimension members can be displayed for the selected flow and provider.</p> -->
         </div>
 
       </div> <!-- container -->
@@ -185,10 +184,31 @@
 
       </div> <!-- container -->
 
-      <script type="text/javascript">
-        g = new Dygraph(
-        document.getElementById("graphdiv"),
-        @Html(sd.output)
+    <script type="text/javascript">
+          // var labels = ['x'];
+          // for (var i = 0; i < numSeries; ++i) {
+          //     var label = '' + i;
+          //     label = 's' + '000'.substr(label.length) + label;
+          //     labels[i + 1] = label;
+          // }
+          g = new Dygraph(
+            document.getElementById("graphdiv"),
+            @Html(sd.output),
+            {
+                labels: @Html(sd.labels),
+                // labels: labels.slice(),
+                colors: [ "#006272", "#97D700", "#00B5E2", "#753BBD", "#DF1995", "#FF6900", "#FBE122" ],
+                animatedZooms: "true",
+                highlightCircleSize: 2,
+                strokeWidth: 1,
+                // labelsDivWidth: 850,
+                labelsDivStyles: { "text-align": "left" },
+                highlightSeriesOpts: {
+                    strokeWidth: 2,
+                    strokeBorderWidth: 1,
+                    highlightCircleSize: 4
+                }
+            }
         );
       </script>
 
