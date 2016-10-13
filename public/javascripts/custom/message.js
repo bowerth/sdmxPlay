@@ -15,7 +15,7 @@ $(function() {
     $("#getMessageSdmxHelpButton").click(function(event) {
 		    $(".well").empty(); // empty div before
         // $(".well").append($("<h5>").text("Hello"));
-        $(".well").append("<h3>sdmxPlay</h3><p>Please find below a quick overview of the functionality. This information will disappear when clicking one of the 'List' buttons above. To bring it back, simply reload the page using F5.</p>");
+        $(".well").append("<h3>sdmxPlay</h3><p>Please find below a quick overview of the functionality.</p>");
         $(".well").append("<h4>Site URL</h4><p>The URL is linked to the 'Provider Code' and 'Query' text input fields. For example, /ECB/EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A/ corresponds to Provider Code 'ECB' and Query 'EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A'.</p>");
         $(".well").append("<h4>Time Series Chart</h4><p>If the selected query returns a time series with frequency that can be parsed by the implemented date transformation functions (Annual, Quarterly, Monthly), it will be displayed using dygraphs. Using mouse click-and-drag, the user can zoom in horizontally or vertically. The time series chart display can be reset with a double-click.</p>");
         $(".well").append("<h4>Min and Max Series</h4><p>When selecting a large number of series and displaying actual values (e.g. instead of growth rates), one can easily identify the series with highest and lowest values returned by the query from the 'Min Series' and 'Max Series' fields.</p>");

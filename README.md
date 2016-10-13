@@ -8,3 +8,8 @@ This application retrieves time series available from SDMX APIs. The SDMX query 
 To facilitate defining the query, available dimension members can be displayed for the selected flow and provider.
 
 ![ECB EXR time series](assets/screenshot-ecb-exr-a-q-m.png)
+
+## Example Queries
+
+- [Daily Exchange Rates USD, GBP to EUR since 2010](https://boiling-lake-45550.herokuapp.com/ECB/EXR.D.USD+GBP.EUR.SP00.A/?start=2010)
+
