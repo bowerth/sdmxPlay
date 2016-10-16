@@ -20,11 +20,17 @@ object SdmxSeries extends Controller {
     // val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.*"
     // val provider = "ECB"
     // val start = Option[String]("1999")
-    val query = "CNA-2005-FBCF-SI-A17.S11ES14AA.*.IPCH"
-    val provider = "INSEE"
+    // val query = "CNA-2005-FBCF-SI-A17.S11ES14AA.*.IPCH"
+    // val provider = "INSEE"
+    // val query = "nama_gdp_c.A.EUR_HAB.B11.AT"
+    // val provider = "EUROSTAT"
+    val query = "STANI4.*.INTP.0539"
+    val provider = "OECD"
     // val start = Option[String](null)
-    val start = Option[String]("1950")
-    val end = Option[String](null)
+    // val start = Option[String]("1950")
+    // val end = Option[String](null)
+    val start = Option[String]("2000")
+    val end = Option[String]("2013")
     Redirect(routes.SdmxSeries.main(provider, query, start, end))
   }
 
