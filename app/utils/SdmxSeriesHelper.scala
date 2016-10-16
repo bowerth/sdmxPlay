@@ -52,7 +52,7 @@ object SdmxSeriesHelper {
           if (brackets == true)
             "[\n"+ tableSeq.mkString(",\n") +"\n]"
           else
-            tableSeq.mkString(",\n")
+            tableSeq.mkString("\n")
         return table
       }
 
