@@ -1,0 +1,38 @@
+# Use container-based infrastructure
+sudo: false
+
+language: scala
+
+# These directories are cached to S3 at the end of the build
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/
+
+# This is an sbt plugin, so this section is for demo purpose
+scala:
+   - 2.11.8
+   - 2.10.4
+
+jdk:
+  - openjdk7
+
+env:
+  # This splits the build into two parts
+  matrix:
+    - TEST_COMMAND="scripted sbt-assembly/*"
+    - TEST_COMMAND="scripted merging/* caching/*"
+
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M "$TEST_COMMAND"
+
+  # Tricks to avoid unnecessary cache updates
+  - find $HOME/.sbt -name "*.lock" | xargs rm
+  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+
+# Email specific recipient all the time
+notifications:
+  email:
+    recipients:
+      secure: "V1yWvvKmGN6UVjS8PzTOdYx/I3gkh/vmDDgelZCvQPLP4QjOpNbYSOD2tj+b94Fu0VnUMvWyI3OPdW9HlIJYjJhcp84U6dDiWCFuE2JR/rA+4sDNGKFC6419ym2UfXX+mJ9ZX6lEHJCldxkMdyo6qi2jgKp2Kmd/Fxm+N62oAhKaI1aHV6sS4Kj0MZFS7v6Uz9f756263f6Qr2T0Fyj5Kv7B/J3b9MHP7dlLX93lM7cuOzdSK1pcFTMhFf/ygih6LMm9qZBYByoIERYbnCo0GO/R0AIR0giBkiCKVOnEOoGXLGqeC3IA3ItjkQYmRgV48ewJGMR9rzAWw4OUtdxCbp+Hu5ncb4mEG3AvFYwPDqw6jWmyLqzuJjprgt16BN6x6bq0JSlQO5BBsa4fNl5wVEj3Y7lOjDPmQ44ImJRakvEtNDBLknBfURc6KP63vLiY3GOesCANK75ieQUV0uEdclK4dtXzWlVmIaw5c4hda29Y2trln/DHE4VlzwAMhcU+MP9qyV39R7gh/waRwE0sLAxo9QzhW/Yut2QHOXKq7BAzKqnS2hEx5EPXdddb/OTohyFeBUxSbbix+qUR5+tR75VEI3jysd+tUdJgCBR5y+nP6oy44tZXfz7oE++57wHOid9UYF4UQ/LzlBmlqW3MZ0D1/27cQM/6nKWpI7I9Ylo="
+    on_success: always # default: change
