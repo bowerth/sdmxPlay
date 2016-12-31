@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bowerth/sdmxPlay.svg?branch=master)](https://travis-ci.org/bowerth/sdmxPlay)
+
 SDMX Play application
 =================================
 
@@ -12,5 +14,3 @@ To facilitate defining the query, available dimension members can be displayed f
 ## Example Queries
 
 - [Daily Exchange Rates USD, GBP to EUR since 2010](https://boiling-lake-45550.herokuapp.com/ECB/EXR.D.USD+GBP.EUR.SP00.A/?start=2010)
-
- 
