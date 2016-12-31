@@ -12,16 +12,16 @@ cache:
 # This is an sbt plugin, so this section is for demo purpose
 scala:
    - 2.11.8
-   - 2.10.4
+#   - 2.10.4
 
 jdk:
-  - openjdk7
+  - openjdk8
 
 env:
   # This splits the build into two parts
   matrix:
     - TEST_COMMAND="scripted sbt-assembly/*"
-    - TEST_COMMAND="scripted merging/* caching/*"
+#    - TEST_COMMAND="scripted merging/* caching/*"
 
 script:
   - sbt ++$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M "$TEST_COMMAND"
