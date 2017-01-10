@@ -24,12 +24,14 @@ object SdmxSeries extends Controller {
     // val provider = "INSEE"
     // val query = "nama_gdp_c.A.EUR_HAB.B11.AT"
     // val provider = "EUROSTAT"
-    val query = "STANI4.*.INTP.0539"
-    val provider = "OECD"
+    // val query = "STANI4.*.INTP.0539"
+    // val provider = "OECD"
+    val query = "FF.*.*.US+FR._T._T._T._T._T._T.EXHIB._T"
+    val provider = "UIS"
     // val start = Option[String](null)
     // val start = Option[String]("1950")
     // val end = Option[String](null)
-    val start = Option[String]("2000")
+    val start = Option[String]("1995")
     val end = Option[String]("2013")
     Redirect(routes.SdmxSeries.main(provider, query, start, end))
   }
