@@ -1,5 +1,6 @@
 package controllers
 
+import models.Message
 import play.api.mvc.{Action, Controller}
 import play.api.libs.json.Json
 import play.api.libs.json.Json.toJson
@@ -8,10 +9,16 @@ import controllers.SdmxMeta.getSdmxProvider
 import controllers.SdmxMeta.getSdmxFlow
 import controllers.SdmxMeta.getSdmxDimension
 import controllers.SdmxMeta.getSdmxCode
+
 import scala.collection.breakOut
 import java.io.File
+import scala.io.Source
 
-case class Message(value: String)
+import laika.api.Transform
+import laika.parse.markdown.Markdown
+// import laika.render.HTML
+
+// case class Message(value: String)
 
 object MessageController extends Controller {
 
@@ -32,6 +39,17 @@ object MessageController extends Controller {
 
   def getMessageSdmxProvider = Action {
     Ok(Json.toJson(Message(getSdmxProvider().output)))
+  }
+
+  def getMessageSdmxHelp = Action {
+//    val mdMessage = """# Hello
+//### Hello2"""
+    val mdFile = "public/docs/MessageSdmxHelp.md"
+    val mdMessage = Source.fromFile(mdFile).getLines.mkString("\n")
+    // val htmlMessage = Transform from Markdown to HTML fromString mdMessage toString
+    val htmlMessage = Transform.from(Markdown).to(laika.render.HTML).fromString(mdMessage).toString()
+    // Ok(Json.toJson(Message("<h5>Hello3</h5>")))
+    Ok(Json.toJson(Message(htmlMessage)))
   }
 
   def getMessageSdmxFlow(provider: String, pattern: String) = Action {
@@ -73,6 +91,7 @@ object MessageController extends Controller {
   def javascriptRoutes = Action { implicit request =>
     Ok(JavaScriptReverseRouter("jsRoutes")(
       controllers.routes.javascript.MessageController.getMessageSdmxProvider,
+      controllers.routes.javascript.MessageController.getMessageSdmxHelp,
       controllers.routes.javascript.MessageController.getMessageSdmxFlow,
       controllers.routes.javascript.MessageController.getMessageSdmxDimension,
       controllers.routes.javascript.MessageController.getMessageSdmxCode,

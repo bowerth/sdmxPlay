@@ -11,6 +11,7 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
+  "org.planet42" %% "laika-core" % "0.7.0",
   specs2 % Test
   //   ,
   // "org.webjars" %% "webjars-play" % "2.2.0",

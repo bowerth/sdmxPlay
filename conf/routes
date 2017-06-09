@@ -10,6 +10,7 @@ GET     /:provider/:query                controllers.SdmxSeries.redirect(provide
 GET     /getdownloadsdmx                 controllers.MessageController.getDownloadSdmx()
 
 GET     /messagesdmxprovider             controllers.MessageController.getMessageSdmxProvider()
+GET     /messagesdmxhelp                 controllers.MessageController.getMessageSdmxHelp()
 GET     /messagesdmxflow             	 controllers.MessageController.getMessageSdmxFlow(provider: String, pattern: String)
 GET     /messagesdmxdimension            controllers.MessageController.getMessageSdmxDimension(provider: String, flow: String)
 GET     /messagesdmxcode             	 controllers.MessageController.getMessageSdmxCode(provider: String, flow: String)
