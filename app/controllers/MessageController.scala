@@ -16,6 +16,7 @@ import scala.io.Source
 
 import laika.api.Transform
 import laika.parse.markdown.Markdown
+import laika.parse.rst.ReStructuredText
 // import laika.render.HTML
 
 // case class Message(value: String)
@@ -42,13 +43,12 @@ object MessageController extends Controller {
   }
 
   def getMessageSdmxHelp = Action {
-//    val mdMessage = """# Hello
-//### Hello2"""
     val mdFile = "public/docs/MessageSdmxHelp.md"
     val mdMessage = Source.fromFile(mdFile).getLines.mkString("\n")
-    // val htmlMessage = Transform from Markdown to HTML fromString mdMessage toString
     val htmlMessage = Transform.from(Markdown).to(laika.render.HTML).fromString(mdMessage).toString()
-    // Ok(Json.toJson(Message("<h5>Hello3</h5>")))
+//    val rstFile = "public/docs/MessageSdmxHelp.rst"
+//    val rstMessage = Source.fromFile(rstFile).getLines.mkString("\n")
+//    val htmlMessage = Transform.from(ReStructuredText).to(laika.render.HTML).fromString(rstMessage).toString()
     Ok(Json.toJson(Message(htmlMessage)))
   }
 
