@@ -6,8 +6,8 @@ function getMessageSdmxHelp() {
     jsRoutes.controllers.MessageController.getMessageSdmxHelp().ajax({
         success: function (data) {
             console.log(data);
-            $(".well").empty();
-            $(".well").html(data.value);
+            $("#infowell").empty();
+            $("#infowell").html(data.value);
         }
     });
 }
@@ -24,9 +24,9 @@ $(function () {
         jsRoutes.controllers.MessageController.getMessageSdmxProvider().ajax({
             success: function (data) {
                 console.log(data);
-                $(".well").empty(); // empty div before
-                $(".well").append($("<h5>").text("SDMX providers"));
-                $(".well").append($("<h5>").text(data.value));
+                $("#infowell").empty(); // empty div before
+                $("#infowell").append($("<h5>").text("SDMX providers"));
+                $("#infowell").append($("<h5>").text(data.value));
             }
         });
     });
@@ -66,9 +66,9 @@ $(function () {
         jsRoutes.controllers.MessageController.getMessageSdmxDimension(provider, flow).ajax({
             success: function (data) {
                 console.log(data);
-                $(".well").empty(); // empty div before
-                $(".well").append($("<h5>").text("Dimensions for flow " + flow + " of provider " + provider));
-                $(".well").append($("<h5>").text(data.value));
+                $("#infowell").empty(); // empty div before
+                $("#infowell").append($("<h5>").text("Dimensions for flow " + flow + " of provider " + provider));
+                $("#infowell").append($("<h5>").text(data.value));
             }
         });
     });

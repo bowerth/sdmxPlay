@@ -9,6 +9,7 @@ import java.io.PrintWriter
 import java.io.File
 import utils.PrintFile.withPrintWriter
 
+
 object SdmxSeries extends Controller {
 
   def redirect(provider: String, query: String, start: Option[String], end: Option[String]) = Action { implicit request =>
@@ -16,18 +17,13 @@ object SdmxSeries extends Controller {
   }
 
   def index = Action { implicit request =>
-    // val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.A"
-    // val query = "EXR.A+M+Q.USD+GBP+CAD+AUD.EUR.SP00.*"
-    // val provider = "ECB"
     // val start = Option[String]("1999")
-    // val query = "CNA-2005-FBCF-SI-A17.S11ES14AA.*.IPCH"
+    // val query = "ENQ-CONJ-PROMO-IMMO-VENTE.E.NMCH.BRUT+CVS"
     // val provider = "INSEE"
-    // val query = "nama_gdp_c.A.EUR_HAB.B11.AT"
-    // val provider = "EUROSTAT"
-    // val query = "STANI4.*.INTP.0539"
-    // val provider = "OECD"
-    val query = "FF.*.*.US+FR._T._T._T._T._T._T.EXHIB._T"
-    val provider = "UIS"
+    val query = "STANI4_2016.*.INTP.D05T39"
+    val provider = "OECD"
+    // val query = "FF.*.*.US+FR._T._T._T._T._T._T.EXHIB._T"
+    // val provider = "UIS"
     // val start = Option[String](null)
     // val start = Option[String]("1950")
     // val end = Option[String](null)
@@ -60,7 +56,7 @@ object SdmxSeries extends Controller {
 
   val errorSdmxData = SdmxData(null, null, null, null, "", "", "", "")
 
-  private def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]): SdmxData = {
+  def getSdmxData(provider: String, query: String, start: Option[String], end: Option[String]): SdmxData = {
     if ( provider == null ) errorSdmxData
     else try {
       val res = SdmxClientHandler.getTimeSeries(provider, query, start.get, end.get)
@@ -96,5 +92,6 @@ object SdmxSeries extends Controller {
       case _: Throwable => errorSdmxData
     }
   }
+
 
 }

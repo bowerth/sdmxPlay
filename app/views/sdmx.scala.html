@@ -22,6 +22,7 @@
         <!-- Message Controller -->
         <script type="text/javascript" src="@routes.MessageController.javascriptRoutes"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/custom/message.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/custom/viz.js")"></script>
         <!-- test SASS module -->
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/datatables.css")">
 
@@ -118,9 +119,7 @@
                         </div> <!-- form-group -->
                     </form>
                 </div> 
-
             </div> <!-- container -->
-
 
             <div class="container">
                 <div class="form-inline">
@@ -150,11 +149,8 @@
                     </div> <!-- form-group -->
                 </div> <!-- form-inline -->
 
-                <div class="well">
-                    <!-- <h1>SDMX Play application</h1> -->
-                    <!-- <p>Scala Play application using <a href="https://github.com/amattioc/SDMX">SDMX</a> Java functions and <a href="https://github.com/danvk/dygraphs">dygraphs</a> timeseries visualization.</p> -->
-                    <!-- <p>This application retrieves time series available from SDMX APIs. The SDMX query can either be specified through the user interface or by modification of the URL. The SDMX provider is henceforth contacted with the query and in case of existing time series returns information transformed into a JavaScript data format for display and download.</p> -->
-                    <!-- <p>To facilitate defining the query, available dimension members can be displayed for the selected flow and provider.</p> -->
+                <!-- messages and help info are attached here -->
+                <div id="infowell" class="well">
                 </div>
 
             </div> <!-- container -->
@@ -193,12 +189,6 @@
             </div> <!-- container -->
 
             <script type="text/javascript">
-                // var labels = ['x'];
-                // for (var i = 0; i < numSeries; ++i) {
-                //     var label = '' + i;
-                //     label = 's' + '000'.substr(label.length) + label;
-                //     labels[i + 1] = label;
-                // }
                 g = new Dygraph(
                     document.getElementById("graphdiv"),
                     @Html(sd.output),
@@ -232,9 +222,10 @@
                     <p>using
                         <a href="https://playframework.com/" target="_blank">Play Framework</a>,
                         <a href="http://www.scala-lang.org/" target="_blank">Scala</a>,
-                        <a href="https://github.com/amattioc/sdmx" target="_blank">SDMX Connectors</a>
-                        and <a href="http://dygraphs.com/" target="_blank">dygraphs</a> -
-                        source code available on <a href="http://github.com/bowerth/sdmxPlay">GitHub</a>
+                        <a href="https://github.com/amattioc/sdmx" target="_blank">SDMX Connectors</a>,
+                        <a href="http://dygraphs.com/" target="_blank">dygraphs</a>
+                        and <a href="https://github.com/joh024/dygraph-extra" target="_blank">dygraph-extra</a> -
+                        source code available on <a ref="http://github.com/bowerth/sdmxPlay">GitHub</a>
                     </p>
                 </div>
             </footer>

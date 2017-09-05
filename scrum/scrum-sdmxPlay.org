@@ -1,0 +1,109 @@
+#+TITLE: Example
+#+AUTHOR: youname
+#+EMAIL: youemail@domain.com
+#+TODO: TODO STARTED | DONE DEFERRED
+#+COLUMNS: %35ITEM %TASKID %OWNER %3PRIORITY %TODO %5ESTIMATED{+} %3ACTUAL{+}
+
+* REPORTS
+** SCRUM BOARD
+#+BEGIN: block-update-board
+| TODO                      | STARTED | DONE | DEFERRED |
+|---------------------------+---------+------+----------|
+| S1.01. [#A] name of task1 |         |      |          |
+| S1.02. [#B] name of task2 |         |      |          |
+#+END:
+** DEVELOPER SUMMARY
+#+BEGIN: block-update-summary
+| NAME  | ESTIMATED | ACTUAL | DONE | REMAINING | PENCILS DOWN | PROGRESS   |
+|-------+-----------+--------+------+-----------+--------------+------------|
+| Other |         4 |      0 |    0 |         4 |   2017-01-19 | ---------- |
+| Bo    |         4 |      1 |    0 |         4 |   2017-01-20 | ---------- |
+#+END:
+** BURNDOWN CHART
+#+BEGIN: block-update-graph
+:                                                                               
+:                                   Burndown                                    
+:                                                                               
+:  8 ++---##########----+--------+---------+--------+---------+--------+---++   
+:    |                                                                      |   
+:  7 ++   ........                                           ACTUAL #######++   
+:    |            .                                           IDEAL ....... |   
+:  6 ++            ........                                                ++   
+:    |                     ..                                               |   
+:    |                                                                      |   
+:  5 ++                      ........                                      ++   
+:    |                               .                                      |   
+:  4 ++                               .........                            ++   
+:    |                                         .                            |   
+:  3 ++                                         ........                   ++   
+:    |                                                  .                   |   
+:  2 ++                                                  ........          ++   
+:    |                                                           ..         |   
+:    |                                                                      |   
+:  1 ++                                                            ........++   
+:    |                                                                     .|   
+:  0 ++-------+---------+--------+---------+--------+---------+--------+---+.   
+:    0        2         4        6         8        10        12       14       
+:                                                                               
+:
+#+END:
+** BURNDOWN LIST
+#+PLOT: title:"Burndown" ind:1 deps:(3 4) set:"term dumb" set:"xrange [0:15]" set:"xtics scale 0.5" set:"ytics scale 0.5" file:"burndown.plt"
+#+BEGIN: block-update-burndown
+| DAY |       DATE | ACTUAL | IDEAL | TASKS COMPLETED |
+|-----+------------+--------+-------+-----------------|
+|   1 | 2017-01-16 |      8 |     7 |                 |
+|   2 | 2017-01-17 |      8 |     7 |                 |
+|   3 | 2017-01-18 |      8 |     6 |                 |
+|   4 | 2017-01-19 |        |     6 |                 |
+|   5 | 2017-01-20 |        |     5 |                 |
+|   6 | 2017-01-21 |        |     5 |                 |
+|   7 | 2017-01-22 |        |     4 |                 |
+|   8 | 2017-01-23 |        |     4 |                 |
+|   9 | 2017-01-24 |        |     3 |                 |
+|  10 | 2017-01-25 |        |     3 |                 |
+|  11 | 2017-01-26 |        |     2 |                 |
+|  12 | 2017-01-27 |        |     2 |                 |
+|  13 | 2017-01-28 |        |     1 |                 |
+|  14 | 2017-01-29 |        |     1 |                 |
+|  15 | 2017-01-30 |        |     0 |                 |
+#+END:
+** TASK LIST 
+#+BEGIN: columnview :hlines 2 :maxlevel 5 :id "TASKS"
+| ITEM          | TASKID | OWNER | PRIORITY | TODO | ESTIMATED | ACTUAL |
+|---------------+--------+-------+----------+------+-----------+--------|
+| TASKS         |        |       | B        |      |         8 |      1 |
+|---------------+--------+-------+----------+------+-----------+--------|
+| CATEGORY A    |        |       | B        |      |         8 |      1 |
+| name of task1 | S1.01  | bo    | A        | TODO |         4 |      1 |
+| name of task2 | S1.02  | other | B        | TODO |         4 |        |
+#+END:
+* TASKS 
+  :PROPERTIES:
+  :ID:       TASKS
+  :SPRINTLENGTH: 15
+  :SPRINTSTART: <2017-01-16 Mon>
+  :wpd-bo:      3
+  :wpd-other:    4
+  :END:
+** CATEGORY A
+*** TODO [#A] name of task1
+    :PROPERTIES:
+    :ESTIMATED: 4
+    :ACTUAL:   1
+    :OWNER:    bo
+    :TASKID:   S1.01
+    :END:
+    description of task1
+*** TODO [#B] name of task2
+    :PROPERTIES:
+    :ESTIMATED: 4
+    :ACTUAL: 
+    :OWNER:    other
+    :TASKID:   S1.02
+    :END:
+    description of task2
+* BACKLOG
+** CATEGORY A
+*** TODO name of backlog task1
+    description of backlog task1

@@ -7,6 +7,7 @@ GET     /defaultsite                     controllers.SdmxSeries.index
 GET     /:provider/:query/               controllers.SdmxSeries.main(provider: String, query: String, start: Option[String], end: Option[String])
 GET     /:provider/:query                controllers.SdmxSeries.redirect(provider: String, query: String, start: Option[String], end: Option[String])
 
+# GET     /getsdmxdata                     controllers.SdmxSeries.getSdmxData()
 GET     /getdownloadsdmx                 controllers.MessageController.getDownloadSdmx()
 
 GET     /messagesdmxprovider             controllers.MessageController.getMessageSdmxProvider()
