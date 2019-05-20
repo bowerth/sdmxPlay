@@ -34,6 +34,7 @@ Example queries for various providers are listed below.
   STAN Database for Structural Analysis (ISIC Rev. 4, SNA08)
 - [UIS/FF](/UIS/FF.*.*.US+FR._T._T._T._T._T._T.EXHIB._T/)
   Feature film
+- [UIS/DEM_ECO](/UIS/DEM_ECO.DEC.LCU_USD._Z._Z.*/?start=1990&end=2017)
 - [INEGI/DF_STEI](/INEGI/DF_STEI.*.*.C2173+C2172+C2171+C37013+C37012+C37011+C1700+C1411...../?start=2005)
   Dataflow Short Term Economic Indicators
 - [WB/WDI](/WB/WDI.A.BM_GSR_NFSV_CD.*/?start=1980&end=2015)

@@ -5,11 +5,11 @@ import scala.collection.immutable.ListMap
 
 object SdmxSeriesHelper {
 
-      def getName (tts: PortableTimeSeries): String = {
+      def getName (tts: PortableTimeSeries[Double]): String = {
         tts.getName
       }
 
-      def getTime(tts: PortableTimeSeries): Array[String] = {
+      def getTime(tts: PortableTimeSeries[Double]): Array[String] = {
         tts.getTimeSlotsArray.map(_.toString)
       }
 
@@ -66,9 +66,9 @@ object SdmxSeriesHelper {
         return res
       }
 
-      def fillValues(tts: PortableTimeSeries, time: Array[String], fill: String): Array[String] = {
+      def fillValues(tts: PortableTimeSeries[Double], time: Array[String], fill: String): Array[String] = {
 
-        def getValues(tts: PortableTimeSeries): Array[String] = {
+        def getValues(tts: PortableTimeSeries[Double]): Array[String] = {
           tts.getObservationsArray.map(_.toString)
         }
 

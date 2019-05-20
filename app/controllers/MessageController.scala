@@ -16,7 +16,7 @@ import scala.io.Source
 
 import laika.api.Transform
 import laika.parse.markdown.Markdown
-import laika.parse.rst.ReStructuredText
+// import laika.parse.rst.ReStructuredText
 // import laika.render.HTML
 
 // case class Message(value: String)

@@ -61,7 +61,7 @@ object SdmxSeries extends Controller {
     else try {
       val res = SdmxClientHandler.getTimeSeries(provider, query, start.get, end.get)
       val res2 = res.toArray.
-        map(_.asInstanceOf[PortableTimeSeries])
+        map(_.asInstanceOf[PortableTimeSeries[Double]])
       val nameArray = for (ts <- res2) yield getName(ts)
       val headerArray = "TIME_PERIOD" +: nameArray
       val seriesLength = for (series <- res2) yield getTime(series).length
