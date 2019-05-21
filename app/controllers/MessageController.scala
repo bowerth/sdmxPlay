@@ -12,16 +12,21 @@ import controllers.SdmxMeta.getSdmxCode
 
 import scala.collection.breakOut
 import java.io.File
-import scala.io.Source
 
+import scala.io.Source
 import laika.api.Transform
 import laika.parse.markdown.Markdown
+
+//import scala.concurrent.ExecutionContext
+
 // import laika.parse.rst.ReStructuredText
 // import laika.render.HTML
 
 // case class Message(value: String)
 
 object MessageController extends Controller {
+
+//  implicit val ec = ExecutionContext.global
 
   implicit val fooWrites = Json.writes[Message]
   private def tuple2ToList[T](t: (T,T)): List[T] = List(t._1, t._2)
