@@ -1,10 +1,20 @@
 package controllers
 
+// 2.6.x
+import scala.concurrent.ExecutionContext
+import play.api.http.{FileMimeTypesConfiguration, DefaultFileMimeTypesProvider}
+// https://www.playframework.com/documentation/2.6.x/ScalaJavascriptRouting
+
+import javax.inject.Inject
+import play.api.mvc._
+// import play.api.routing._
+
 import models.Message
-import play.api.mvc.{Action, Controller}
+// import play.api.mvc.{Action, BaseController}
 import play.api.libs.json.Json
 import play.api.libs.json.Json.toJson
 import play.api.routing.JavaScriptReverseRouter
+
 import controllers.SdmxMeta.getSdmxProvider
 import controllers.SdmxMeta.getSdmxFlow
 import controllers.SdmxMeta.getSdmxDimension
@@ -14,19 +24,20 @@ import scala.collection.breakOut
 import java.io.File
 
 import scala.io.Source
+
 import laika.api.Transform
-import laika.parse.markdown.Markdown
+// import laika.ast.{Comment, QuotedBlock}
+import laika.format.{HTML, Markdown}
 
-//import scala.concurrent.ExecutionContext
+// https://aknay.github.io/2018/01/04/javascript-routing-with-play-framework.html
+// object MessageController extends Controller {
+// @Singleton
+class MessageController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+// class MessageController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+// class MessageController @Inject() () extends InjectedController {
 
-// import laika.parse.rst.ReStructuredText
-// import laika.render.HTML
-
-// case class Message(value: String)
-
-object MessageController extends Controller {
-
-//  implicit val ec = ExecutionContext.global
+  implicit val ec = ExecutionContext.global
+  implicit val fileMimeType = new DefaultFileMimeTypesProvider(FileMimeTypesConfiguration(Map("csv" -> "text/csv"))).get
 
   implicit val fooWrites = Json.writes[Message]
   private def tuple2ToList[T](t: (T,T)): List[T] = List(t._1, t._2)
@@ -44,13 +55,13 @@ object MessageController extends Controller {
   }
 
   def getMessageSdmxProvider = Action {
-    Ok(Json.toJson(Message(getSdmxProvider().output)))
+    Ok(Json.toJson(Message(getSdmxProvider.output)))
   }
 
   def getMessageSdmxHelp = Action {
     val mdFile = "public/docs/MessageSdmxHelp.md"
     val mdMessage = Source.fromFile(mdFile).getLines.mkString("\n")
-    val htmlMessage = Transform.from(Markdown).to(laika.render.HTML).fromString(mdMessage).toString()
+    val htmlMessage = Transform.from(Markdown).to(laika.format.HTML).fromString(mdMessage).toString()
 //    val rstFile = "public/docs/MessageSdmxHelp.rst"
 //    val rstMessage = Source.fromFile(rstFile).getLines.mkString("\n")
 //    val htmlMessage = Transform.from(ReStructuredText).to(laika.render.HTML).fromString(rstMessage).toString()
@@ -93,15 +104,15 @@ object MessageController extends Controller {
     Ok(jsontest)
   }
 
-  def javascriptRoutes = Action { implicit request =>
-    Ok(JavaScriptReverseRouter("jsRoutes")(
-      controllers.routes.javascript.MessageController.getMessageSdmxProvider,
-      controllers.routes.javascript.MessageController.getMessageSdmxHelp,
-      controllers.routes.javascript.MessageController.getMessageSdmxFlow,
-      controllers.routes.javascript.MessageController.getMessageSdmxDimension,
-      controllers.routes.javascript.MessageController.getMessageSdmxCode,
-      controllers.routes.javascript.MessageController.getDownloadSdmx
-    )).as("text/javascript")
-  }
+  // def javascriptRoutes = Action { implicit request =>
+  //   Ok(JavaScriptReverseRouter("jsRoutes")(
+  //     routes.javascript.MessageController.getMessageSdmxProvider,
+  //     routes.javascript.MessageController.getMessageSdmxHelp,
+  //     routes.javascript.MessageController.getMessageSdmxFlow,
+  //     routes.javascript.MessageController.getMessageSdmxDimension,
+  //     routes.javascript.MessageController.getMessageSdmxCode,
+  //     routes.javascript.MessageController.getDownloadSdmx
+  //   )).as("text/javascript")
+  // }
 
 }

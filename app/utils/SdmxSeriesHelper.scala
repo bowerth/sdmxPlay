@@ -13,7 +13,7 @@ object SdmxSeriesHelper {
         tts.getTimeSlotsArray.map(_.toString)
       }
 
-      def modifyDate(date: String) = {
+  def modifyDate(date: String) = {
 
         def dateQtoD (date: String) = {
           val month = ((date.takeRight(1).toInt - 1) * 3 + 1).toString

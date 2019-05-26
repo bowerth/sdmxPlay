@@ -1,5 +1,6 @@
 package controllers
 
+import javax.inject.Inject
 import play.api.mvc._
 import models.SdmxData
 import it.bancaditalia.oss.sdmx.client.SdmxClientHandler
@@ -10,7 +11,8 @@ import java.io.File
 import utils.PrintFile.withPrintWriter
 
 
-object SdmxSeries extends Controller {
+// object SdmxSeries extends Controller {
+class SdmxSeries @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   def redirect(provider: String, query: String, start: Option[String], end: Option[String]) = Action { implicit request =>
     Redirect(routes.SdmxSeries.main(provider, query, start, end))
