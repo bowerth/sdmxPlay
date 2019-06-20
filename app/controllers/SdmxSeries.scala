@@ -75,13 +75,13 @@ class SdmxSeries @Inject()(cc: ControllerComponents) extends AbstractController(
       val output = l
       val labels = "[ \"" + headerArray.mkString("\",\"") + "\" ]"
       // csv data format for download
-      val file = new File("public/output.csv")
-      val valueArrayCsv = for (series <- res2) yield fillValues(series, timeRef, "")
-      val dataArrayCsv = timeRef +: valueArrayCsv
-      val lcsv = makeTable(data = dataArrayCsv, brackets = false)
-      withPrintWriter(file) {
-        writer => writer.println(headerArray.mkString(",") +"\n"+ lcsv)
-      }
+//      val file = new File("public/output.csv")
+//      val valueArrayCsv = for (series <- res2) yield fillValues(series, timeRef, "")
+//      val dataArrayCsv = timeRef +: valueArrayCsv
+//      val lcsv = makeTable(data = dataArrayCsv, brackets = false)
+//      withPrintWriter(file) {
+//        writer => writer.println(headerArray.mkString(",") +"\n"+ lcsv)
+//      }
       // function return value
       return SdmxData(provider, query, start, end, output, labels, nameMin, nameMax)
     } catch {
