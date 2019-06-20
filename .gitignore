@@ -20,7 +20,7 @@ target/
 
 *#*
 
-output.csv
+# output.csv
 
 activator*
 

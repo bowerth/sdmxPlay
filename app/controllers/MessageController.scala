@@ -47,7 +47,7 @@ class MessageController @Inject()(cc: ControllerComponents) extends AbstractCont
   }
 
   def getDownloadSdmx = Action {
-    val file = new File("output.csv")
+    val file = new File("public/output.csv")
     Ok.sendFile(
       content = file,
       fileName = _ => file.getName
