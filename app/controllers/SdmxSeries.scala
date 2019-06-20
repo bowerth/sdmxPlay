@@ -75,7 +75,7 @@ class SdmxSeries @Inject()(cc: ControllerComponents) extends AbstractController(
       val output = l
       val labels = "[ \"" + headerArray.mkString("\",\"") + "\" ]"
       // csv data format for download
-      val file = new File("output.csv")
+      val file = new File("public/output.csv")
       val valueArrayCsv = for (series <- res2) yield fillValues(series, timeRef, "")
       val dataArrayCsv = timeRef +: valueArrayCsv
       val lcsv = makeTable(data = dataArrayCsv, brackets = false)
