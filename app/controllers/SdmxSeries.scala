@@ -19,18 +19,12 @@ class SdmxSeries @Inject()(cc: ControllerComponents) extends AbstractController(
   }
 
   def index = Action { implicit request =>
-    // val start = Option[String]("1999")
-    // val query = "ENQ-CONJ-PROMO-IMMO-VENTE.E.NMCH.BRUT+CVS"
-    // val provider = "INSEE"
-    val query = "STANI4_2016.*.INTP.D05T39"
-    val provider = "OECD"
-    // val query = "FF.*.*.US+FR._T._T._T._T._T._T.EXHIB._T"
-    // val provider = "UIS"
-    // val start = Option[String](null)
-    // val start = Option[String]("1950")
-    // val end = Option[String](null)
-    val start = Option[String]("1995")
-    val end = Option[String]("2013")
+//    val query = "STANI4_2016.*.INTP.D05T39"
+//    val provider = "OECD"
+    val query = "CPI.1.*.40027.*.Q"
+    val provider = "ABS"
+    val start = Option[String]("1980")
+    val end = Option[String]("2019")
     Redirect(routes.SdmxSeries.main(provider, query, start, end))
   }
 
